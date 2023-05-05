@@ -1,0 +1,327 @@
+<?php
+
+namespace ZekyWolf\LGSQ\Helpers;
+
+class PortConversion
+{
+    public static function get(string $type, int $c_port, int $q_port, int $s_port): array
+    {
+        // GAMES WHERE Q_PORT IS NOT EQUAL TO C_PORT
+        switch ($type) {
+            case 'aarmy': $c_to_q = 1;
+                $c_def = 1716;
+                $q_def = 1717;
+                $c_to_s = 0;
+                break;
+            case 'aarmy3': $c_to_q = 0;
+                $c_def = 8777;
+                $q_def = 39300;
+                $c_to_s = 0;
+                break;
+            case 'arcasimracing': $c_to_q = -100;
+                $c_def = 34397;
+                $q_def = 34297;
+                $c_to_s = 0;
+                break;
+            case 'arma3': $c_to_q = 0;
+                $c_def = 2302;
+                $q_def = 2303;
+                $c_to_s = 0;
+                break;
+            case 'bfbc2': $c_to_q = 0;
+                $c_def = 19567;
+                $q_def = 48888;
+                $c_to_s = 0;
+                break;
+            case 'bfvietnam': $c_to_q = 0;
+                $c_def = 15567;
+                $q_def = 23000;
+                $c_to_s = 0;
+                break;
+            case 'bf1942': $c_to_q = 0;
+                $c_def = 14567;
+                $q_def = 23000;
+                $c_to_s = 0;
+                break;
+            case 'bf2': $c_to_q = 0;
+                $c_def = 16567;
+                $q_def = 29900;
+                $c_to_s = 0;
+                break;
+            case 'bf3': $c_to_q = 22000;
+                $c_def = 25200;
+                $q_def = 47200;
+                $c_to_s = 0;
+                break;
+            case 'bf2142': $c_to_q = 0;
+                $c_def = 17567;
+                $q_def = 29900;
+                $c_to_s = 0;
+                break;
+            case 'callofdutybo3': $c_to_q = 0;
+                $c_def = 27017;
+                $q_def = 27017;
+                $c_to_s = 0;
+                break;
+            case 'cube': $c_to_q = 1;
+                $c_def = 28785;
+                $q_def = 28786;
+                $c_to_s = 0;
+                break;
+            case 'dh2005': $c_to_q = 0;
+                $c_def = 23459;
+                $q_def = 34567;
+                $c_to_s = 0;
+                break;
+            case 'discord': $c_to_q = 0;
+                $c_def = 1;
+                $q_def = 1;
+                $c_to_s = 0;
+                break;
+            case 'factorio': $c_to_q = 0;
+                $c_def = 34197;
+                $q_def = 34197;
+                $c_to_s = 0;
+                break;
+            case 'farcry': $c_to_q = 123;
+                $c_def = 49001;
+                $q_def = 49124;
+                $c_to_s = 0;
+                break;
+            case 'fivem': $c_to_q = 0;
+                $c_def = 30120;
+                $q_def = 30120;
+                $c_to_s = 0;
+                break;
+            case 'flashpoint': $c_to_q = 1;
+                $c_def = 2302;
+                $q_def = 2303;
+                $c_to_s = 0;
+                break;
+            case 'frontlines': $c_to_q = 2;
+                $c_def = 5476;
+                $q_def = 5478;
+                $c_to_s = 0;
+                break;
+            case 'ghostrecon': $c_to_q = 2;
+                $c_def = 2346;
+                $q_def = 2348;
+                $c_to_s = 0;
+                break;
+            case 'gtr2': $c_to_q = 1;
+                $c_def = 34297;
+                $q_def = 34298;
+                $c_to_s = 0;
+                break;
+            case 'had2': $c_to_q = 3;
+                $c_def = 11001;
+                $q_def = 11004;
+                $c_to_s = 0;
+                break;
+            case 'kingpin': $c_to_q = -10;
+                $c_def = 31510;
+                $q_def = 31500;
+                $c_to_s = 0;
+                break;
+            case 'killingfloor': $c_to_q = 1;
+                $c_def = 7708;
+                $q_def = 7709;
+                $c_to_s = 0;
+                break;
+            case 'mohaa': $c_to_q = 97;
+                $c_def = 12203;
+                $q_def = 12300;
+                $c_to_s = 0;
+                break;
+            case 'mohaab': $c_to_q = 97;
+                $c_def = 12203;
+                $q_def = 12300;
+                $c_to_s = 0;
+                break;
+            case 'mohaas': $c_to_q = 97;
+                $c_def = 12203;
+                $q_def = 12300;
+                $c_to_s = 0;
+                break;
+            case 'mohpa': $c_to_q = 97;
+                $c_def = 13203;
+                $q_def = 13300;
+                $c_to_s = 0;
+                break;
+            case 'mta': $c_to_q = 123;
+                $c_def = 22003;
+                $q_def = 22126;
+                $c_to_s = 0;
+                break;
+            case 'painkiller': $c_to_q = 123;
+                $c_def = 3455;
+                $q_def = 3578;
+                $c_to_s = 0;
+                break;
+            case 'ragemp': $c_to_q = 0;
+                $c_def = 22005;
+                $q_def = 22005;
+                $c_to_s = 0;
+                break;
+            case 'ravenshield': $c_to_q = 1000;
+                $c_def = 7777;
+                $q_def = 8777;
+                $c_to_s = 0;
+                break;
+            case 'redorchestra': $c_to_q = 1;
+                $c_def = 7758;
+                $q_def = 7759;
+                $c_to_s = 0;
+                break;
+            case 'rfactor': $c_to_q = -100;
+                $c_def = 34397;
+                $q_def = 34297;
+                $c_to_s = 0;
+                break;
+            case 'serioussam': $c_to_q = 1;
+                $c_def = 25600;
+                $q_def = 25601;
+                $c_to_s = 0;
+                break;
+            case 'soldat': $c_to_q = 123;
+                $c_def = 23073;
+                $q_def = 23196;
+                $c_to_s = 0;
+                break;
+            case 'sf': $c_to_q = 0;
+                $c_def = 7777;
+                $q_def = 15777;
+                $c_to_s = 0;
+                break;
+            case 'stalker': $c_to_q = 2;
+                $c_def = 5447;
+                $q_def = 5445;
+                $c_to_s = 0;
+                break;
+            case 'stalkercop': $c_to_q = 2;
+                $c_def = 5447;
+                $q_def = 5445;
+                $c_to_s = 0;
+                break;
+            case 'stalkercs': $c_to_q = 2;
+                $c_def = 5447;
+                $q_def = 5445;
+                $c_to_s = 0;
+                break;
+            case 'starwarsrc': $c_to_q = 0;
+                $c_def = 7777;
+                $q_def = 11138;
+                $c_to_s = 0;
+                break;
+            case 'swat4': $c_to_q = 1;
+                $c_def = 10780;
+                $q_def = 10781;
+                $c_to_s = 0;
+                break;
+            case 'terraria': $c_to_q = 101;
+                $c_def = 7777;
+                $q_def = 7878;
+                $c_to_s = 0;
+                break;
+            case 'tribesv': $c_to_q = 1;
+                $c_def = 7777;
+                $q_def = 7778;
+                $c_to_s = 0;
+                break;
+            case 'ts': $c_to_q = 0;
+                $c_def = 8767;
+                $q_def = 51234;
+                $c_to_s = 0;
+                break;
+            case 'ts3': $c_to_q = 0;
+                $c_def = 9987;
+                $q_def = 10011;
+                $c_to_s = 0;
+                break;
+            case 'teaspeak': $c_to_q = 0;
+                $c_def = 9987;
+                $q_def = 10101;
+                $c_to_s = 0;
+                break;
+            case 'ut': $c_to_q = 1;
+                $c_def = 7777;
+                $q_def = 7778;
+                $c_to_s = 0;
+                break;
+            case 'ut2003': $c_to_q = 1;
+                $c_def = 7757;
+                $q_def = 7758;
+                $c_to_s = 10;
+                break;
+            case 'ut2003_': $c_to_q = 10;
+                $c_def = 7757;
+                $q_def = 7767;
+                $c_to_s = 0;
+                break;
+            case 'ut2004': $c_to_q = 1;
+                $c_def = 7777;
+                $q_def = 7778;
+                $c_to_s = 10;
+                break;
+            case 'ut2004_': $c_to_q = 10;
+                $c_def = 7777;
+                $q_def = 7787;
+                $c_to_s = 0;
+                break;
+            case 'ut3': $c_to_q = 0;
+                $c_def = 7777;
+                $q_def = 6500;
+                $c_to_s = 0;
+                break;
+            case 'vietcong': $c_to_q = 10000;
+                $c_def = 5425;
+                $q_def = 15425;
+                $c_to_s = 0;
+                break;
+            case 'vietcong2': $c_to_q = 0;
+                $c_def = 5001;
+                $q_def = 19967;
+                $c_to_s = 0;
+                break;
+            case 'wow': $c_to_q = 0;
+                $c_def = 3724;
+                $q_def = 8085;
+                $c_to_s = 0;
+                break;
+            default: $c_to_q = 0;
+                $c_def = 0;
+                $q_def = 0;
+                $c_to_s = 0;
+                break;
+        }
+
+        if (!$c_port && ! $q_port && $c_def) {
+            $c_port = $c_def;
+            $q_port = $q_def;
+        }
+
+        if (! $c_port && $q_port && $c_to_q) {
+            $c_port = $q_port - $c_to_q;
+        } elseif (! $c_port && $q_port && $c_def) {
+            $c_port = $c_def;
+        } elseif (! $c_port && $q_port) {
+            $c_port = $q_port;
+        }
+        if (! $q_port && $c_port && $c_to_q) {
+            $q_port = $c_port + $c_to_q;
+        } elseif (! $q_port && $c_port && $q_def) {
+            $q_port = $q_def;
+        } elseif (! $q_port && $c_port) {
+            $q_port = $c_port;
+        }
+        if (! $s_port && $c_to_s) {
+            $s_port = $c_port + $c_to_s;
+        }
+
+        return [
+            intval($c_port),
+            intval($q_port),
+            intval($s_port),
+        ];
+    }
+}
