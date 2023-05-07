@@ -6,6 +6,7 @@ use ZekyWolf\LGSQ\Helpers\{
     ERequestParams as RParams,
     EServerParams as SParams,
     EConnectionParams as CParams,
+    Games,
     GameTypeScheme,
     ProtocolList
 };
@@ -63,7 +64,7 @@ class LGSQ
         $this->server = [
             SParams::BASIC => [
                 CParams::TYPE => $this->type,
-                CParams::IP => $serverData[CParams::IP],
+                CParams::IP => $this->clearHostName($this->type, $serverData[CParams::IP]),
                 CParams::PORT => in_array(CParams::PORT, $serverData) ? $serverData[CParams::PORT] : 1,
                 CParams::QPORT => in_array(CParams::QPORT, $serverData) ? $serverData[CParams::QPORT] : 1,
                 CParams::SPORT => in_array(CParams::SPORT, $serverData) ? $serverData[CParams::SPORT] : 1,
@@ -348,5 +349,20 @@ class LGSQ
     public function getCustomData(): array
     {
         return $this->server[SParams::CUSTOM_DATA];
+    }
+
+    private function clearHostName(string $type, string $ip): string
+    {
+        if(
+            $type == Games::DISCORD && 
+            (str_contains($ip, 'discord.gg') || str_contains($ip, 'https://discord.gg'))
+        ){
+            return str_replace([
+                'https://discord.gg/',
+                'discord.gg/',
+            ], "", $ip);
+        }
+
+        return $ip;
     }
 }
