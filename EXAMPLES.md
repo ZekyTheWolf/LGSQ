@@ -1,17 +1,27 @@
 ## Example #1
 
 ```php
-require_once __DIR__.'/LGSQ/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
-use ZekyWolf\LGSQ\LGSQ;
-use ZekyWolf\LGSQ\Helpers\ERequestParams as RParams;
-use ZekyWolf\LGSQ\Helpers\EServerParams as SParams;
+use ZekyWolf\LGSQ\{
+    LGSQ,
+    Helpers\ERequestParams,
+    Helpers\EServerParams,
+    Helpers\EConnectionParams,
+    Helpers\Games
+};
 
-$lgsq = new LGSQ('urbanterror', '176.9.28.206', 27971, 27971,
+$lgsq = new LGSQ(
+    Games::URBANTERROR,
     [
-        RParams::SERVER, 
-        RParams::CONVARS, 
-        RParams::PLAYERS
+        EConnectionParams::IP => '176.9.28.206', 
+        EConnectionParams::PORT => 27971, 
+        EConnectionParams::QPORT => 27971
+    ],
+    [
+        ERequestParams::SERVER, 
+        ERequestParams::CONVARS, 
+        ERequestParams::PLAYERS
     ]
 );
 
@@ -27,10 +37,10 @@ $lgsq->getCustomData();     // <- This will return custom data;
 // We will take all data
 $result = $lgsq->getData();
 
-echo 'Status: '.($result[SParams::BASIC]['status'] == 1 ? 'ONLINE' : 'OFFLINE').'<br />';
-echo 'Name: '.$result[SParams::SERVER]['name'].'<br />';
-echo 'Map: '.$result[SParams::SERVER]['map'] . '<br />';
-echo 'Players: '.$result[SParams::SERVER]['players'].'/'.$result[SParams::SERVER]['playersmax'].'<br />';
+echo 'Status: '.($result[EServerParams::BASIC]['status'] == 1 ? 'ONLINE' : 'OFFLINE').'<br />';
+echo 'Name: '.$result[EServerParams::SERVER]['name'].'<br />';
+echo 'Map: '.$result[EServerParams::SERVER]['map'] . '<br />';
+echo 'Players: '.$result[EServerParams::SERVER]['players'].'/'.$result[EServerParams::SERVER]['playersmax'].'<br />';
 
 ```
 
@@ -39,18 +49,22 @@ echo 'Players: '.$result[SParams::SERVER]['players'].'/'.$result[SParams::SERVER
 ```php
 require_once __DIR__.'/vendor/autoload.php';
 
-$lgsq = new LGSQ('discord', 'nDuNTC6', 1, 1, 
+$lgsq = new LGSQ(
+    Games::DISCORD,
     [
-        RParams::SERVER, 
-        RParams::CONVARS, 
-        RParams::PLAYERS
+        EConnectionParams::IP => 'nDuNTC6'
+    ],
+    [
+        ERequestParams::SERVER, 
+        ERequestParams::CONVARS, 
+        ERequestParams::PLAYERS
     ]
 );
 
 $result = $lgsq->getData();
 
-echo 'Status: '.($result[SParams::BASIC]['status'] == 1 ? 'ONLINE' : 'OFFLINE').'<br />';
-echo 'Name: '.$result[SParams::SERVER]['name'].'<br />';
-echo 'Map: '.$result[SParams::SERVER]['map'] . '<br />';
-echo 'Players: '.$result[SParams::SERVER]['players'].'/'.$result[SParams::SERVER]['playersmax'].'<br />';
+echo 'Status: '.($result[EServerParams::BASIC]['status'] == 1 ? 'ONLINE' : 'OFFLINE').'<br />';
+echo 'Name: '.$result[EServerParams::SERVER]['name'].'<br />';
+echo 'Map: '.$result[EServerParams::SERVER]['map'] . '<br />';
+echo 'Players: '.$result[EServerParams::SERVER]['players'].'/'.$result[EServerParams::SERVER]['playersmax'].'<br />';
 ```

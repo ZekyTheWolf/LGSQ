@@ -2,6 +2,32 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.1.2 - 06.05.2023
+* Removed ip, c_port, q_port, s_port
+-> Now you will use array instead of directly params, reason behind this is that you dont need to now setup unnecessary params, checkout our [examples](EXAMPLES.md)
+```php
+$lgsq = new LGSQ(
+    Games::<game>,
+    [
+        EConnectionParams::IP => 'ip/hostname',
+        EConnectionParams::PORT => <server port>,    // ->
+        EConnectionParams::QPORT => <query port>,    // -> If not provided, automaticly set to 1
+        EConnectionParams::SPORT => <server port>    // ->
+    ],
+    [
+        ERequestParams::SERVER, 
+        ERequestParams::CONVARS, 
+        ERequestParams::PLAYERS
+    ]
+)
+```
++ Created games class (Games::<game to query>).
++ Created Connection params, recommend using when setting up server.
+* Custom data moved directly in to server params, can be retrive via function getCustomData()
+* Edited SofwareLink class to use Games class directly instead of string
+* Edited GameTypeScheme class to use Games class directly instead of string
+- Small code changes, edited examples, readme.
+
 ## 1.0.0 - 05.05.2023
 
 - initial release
@@ -34,9 +60,9 @@ All notable changes to `lgsq` will be documented in this file
  */
 $lgsq = new LGSQ('<game type>', '<ip>', <connection port>, <query port>,
     [
-        RParams::SERVER, 
-        RParams::CONVARS, 
-        RParams::PLAYERS
+        ERequestParams::SERVER, 
+        ERequestParams::CONVARS, 
+        ERequestParams::PLAYERS
     ]
 )
 ```

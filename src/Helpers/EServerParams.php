@@ -13,4 +13,6 @@ abstract class EServerParams
     public const PLAYERS = 'players';
 
     public const TEAMS = 'teams';
+
+    public const CUSTOM_DATA = 'custom_data';
 }

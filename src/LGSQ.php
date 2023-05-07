@@ -5,45 +5,44 @@ namespace ZekyWolf\LGSQ;
 use ZekyWolf\LGSQ\Helpers\{
     ERequestParams as RParams,
     EServerParams as SParams,
+    EConnectionParams as CParams,
     GameTypeScheme,
     ProtocolList
 };
 
 class LGSQ
 {
+    /**
+     * Recommend using Games scheme.
+     */
     private string $type;
-    private string $ip;
-    private int $c_port;
-    private int $q_port;
-    private int $s_port;
     private array $request;
     private array $server;
-    public array $custom_data;
 
     /**
      * MAJOR
      * MINOR
      * PATCH
      */
-    const VERSION = '1.0.1';
+    public const LGSQ_VERSION = '1.1.2-BETA';
 
     /**
      * 
-     * @param $type         Game type
-     * @param $ip           Server IP/Hostname
-     * @param $c_port       Connection port
-     * @param $q_port       Query Port
-     * @param $request      Requested data, 
-     *                      valid: 
-     *                          > Array string, only those 3 are valid, any others will be ignored
-     *                          [ "s", "p", "c" ]
-     *                          > Or usage via ERequestParams abastract class:
-     *                          [ RParams::SERVER, SParams::PLAYERS, SParams::CONVARS]
-     * @param $cdata        Custom data, default []
-     * @param $s_port       Server port, default 0
+     * @param $type
+     * @param $serverData
+     * @param $request
+     * @param $cdata
+     * @param $s_port
      * 
      * @noreturn
-     *
+     * Valid Data for $serverData param
+     * Data for query server in array [ 'ip' => '1.0.0.0', 'port' => 1, 'qport' => 0 ]
+     * 
+     * Valid Data for $request param
+     * Array string, only those 3 are valid, any others will be ignored
+     *      [ "s", "p", "c" ]
+     * or usage via ERequestParams abastract class:
+     *      [ ERequestParams::SERVER, ERequestParams::PLAYERS, ERequestParams::CONVARS]
      * Explanation:
      * Since this is rebuild of LGSL to be more compatibile with Laravel and more PHP Frameworks
      * i decided to make few changes, one visible is in $request.
@@ -54,34 +53,23 @@ class LGSQ
      */
     public function __construct(
         string $type,
-        string $ip,
-        int $c_port,
-        int $q_port,
+        array $serverData,
         array $request = [],
         array $cdata = [],
-        int $s_port = 0,
     ) {
         $this->type = $type;
-        $this->ip = $ip;
-        $this->c_port = $c_port;
-        $this->q_port = $q_port;
-        $this->s_port = $s_port;
         $this->request  = $request;
-        $this->custom_data = $cdata;
 
         $this->server = [
-            // b
             SParams::BASIC => [
-                'type' => $this->type,
-                'ip' => $this->ip,
-                'c_port' => $this->c_port,
-                'q_port' => $this->q_port,
-                's_port' => $this->s_port,
-                'status' => 1,
-                '_error' => null,
+                CParams::TYPE => $this->type,
+                CParams::IP => $serverData[CParams::IP],
+                CParams::PORT => in_array(CParams::PORT, $serverData) ? $serverData[CParams::PORT] : 1,
+                CParams::QPORT => in_array(CParams::QPORT, $serverData) ? $serverData[CParams::QPORT] : 1,
+                CParams::SPORT => in_array(CParams::SPORT, $serverData) ? $serverData[CParams::SPORT] : 1,
+                CParams::STATUS => 1,
+                CParams::ERROR => null,
             ],
-
-            // s
             SParams::SERVER => [
                 'game' => '',
                 'name' => '',
@@ -90,15 +78,10 @@ class LGSQ
                 'playersmax' => 0,
                 'password' => '',
             ],
-
-            // e
             SParams::CONVARS => [],
-
-            // p
             SParams::PLAYERS => [],
-
-            // t
             SParams::TEAMS => [],
+            SParams::CUSTOM_DATA => $cdata,
         ];
 
         $this->CheckAndConnect();
@@ -107,26 +90,23 @@ class LGSQ
     /**
      * This checking if there are valid data.
      */
-    public function CheckAndConnect(): bool|null|array
+    public function CheckAndConnect()
     {
         /**
          * ? IS VALID IP/HOSTNAME?
          */
-        if (preg_match("/[^0-9a-zA-Z\.\-\[\]\:]/i", $this->ip)) {
+        if (preg_match("/[^0-9a-zA-Z\.\-\[\]\:]/i", $this->server[SParams::BASIC][CParams::IP])) {
             $this->server[SParams::BASIC]['status'] = 0;
             $this->server[SParams::BASIC]['_error'] = "LGSQ: Invalid ip and/or hostname.";
-
-            return false;
         }
 
         /**
          * ? IS VALID QUERY PORT?
          */
-        if (!intval($this->q_port)) {
+
+        if (!intval($this->server[SParams::BASIC][CParams::QPORT])) {
             $this->server[SParams::BASIC]['status'] = 0;
             $this->server[SParams::BASIC]['_error'] = "LGSQ: INVALID QUERY PORT";
-
-            return false;
         }
 
         /**
@@ -139,21 +119,19 @@ class LGSQ
             $this->server[SParams::BASIC]['_error'] = [
                 'LGSQ:',
                 $this->type ? "INVALID TYPE '{$this->type}'" : 'MISSING TYPE',
-                'For IP/HOSTNAME: '.$this->ip.', Port: '.$this->c_port
+                'For IP/HOSTNAME: '.$this->server[SParams::BASIC][CParams::IP].', Port: '.$this->server[SParams::BASIC][CParams::QPORT]
             ];
-
-            return false;
         }
 
         $classCheck = "\\ZekyWolf\\LGSQ\\Protocols\\Query{$protocol[$this->type]}";
         if (!class_exists($classCheck)) {
             $this->server[SParams::BASIC]['status'] = 0;
             $this->server[SParams::BASIC]['_error'] = "Invalid query class name, {$classCheck}";
-
-            return false;
         }
 
-        return $this->Retrive();
+        if(!$this->server[SParams::BASIC]['_error']){
+            $this->Retrive();
+        }
     }
 
     /**
@@ -223,8 +201,6 @@ class LGSQ
 
             $this->server[SParams::SERVER]['cache_time'] = time();
         }
-
-        $this->server;
     }
 
     /**
@@ -253,15 +229,15 @@ class LGSQ
             curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ['Accept: application/json']);
         } else {
             $lgsl_fp = @fsockopen(
-                "{$scheme}://{$server[SParams::BASIC]['ip']}",
-                $server[SParams::BASIC]['q_port'],
+                "{$scheme}://{$server[SParams::BASIC][CParams::IP]}",
+                $server[SParams::BASIC][CParams::QPORT],
                 $errno,
                 $errstr,
                 1
             );
 
             if (! $lgsl_fp) {
-                $server[SParams::CONVARS]['_error'] = $errstr;
+                $server[SParams::CONVARS][CParams::ERROR] = $errstr;
 
                 return false;
             }
@@ -371,6 +347,6 @@ class LGSQ
 
     public function getCustomData(): array
     {
-        return $this->custom_data;
+        return $this->server[SParams::CUSTOM_DATA];
     }
 }
