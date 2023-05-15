@@ -25,7 +25,7 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.1.2-BETA';
+    public const LGSQ_VERSION = '1.1.3-BETA';
 
     /**
      * 
@@ -65,9 +65,9 @@ class LGSQ
             SParams::BASIC => [
                 CParams::TYPE => $this->type,
                 CParams::IP => $this->clearHostName($this->type, $serverData[CParams::IP]),
-                CParams::PORT => in_array(CParams::PORT, $serverData) ? $serverData[CParams::PORT] : 1,
-                CParams::QPORT => in_array(CParams::QPORT, $serverData) ? $serverData[CParams::QPORT] : 1,
-                CParams::SPORT => in_array(CParams::SPORT, $serverData) ? $serverData[CParams::SPORT] : 1,
+                CParams::PORT => isset($serverData[CParams::PORT]) ? $serverData[CParams::PORT] : 1,
+                CParams::QPORT => isset($serverData[CParams::QPORT]) ? $serverData[CParams::QPORT] : 1,
+                CParams::SPORT => isset($serverData[CParams::SPORT]) ? $serverData[CParams::SPORT] : 1,
                 CParams::STATUS => 1,
                 CParams::ERROR => null,
             ],
@@ -199,8 +199,6 @@ class LGSQ
             if (in_array(RParams::SERVER, $this->request) && empty($this->server[SParams::SERVER])) {
                 unset($this->server[SParams::SERVER]);
             }
-
-            $this->server[SParams::SERVER]['cache_time'] = time();
         }
     }
 
@@ -363,6 +361,6 @@ class LGSQ
             ], "", $ip);
         }
 
-        return $ip;
+        return str_replace(' ', '', $ip);
     }
 }

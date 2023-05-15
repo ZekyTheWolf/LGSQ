@@ -2,6 +2,10 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.1.3-BETA - 15.05.2023
+* Bug fix
+-> in_array() changed to isset()
+
 ## 1.1.2 - 06.05.2023
 * Removed ip, c_port, q_port, s_port
 -> Now you will use array instead of directly params, reason behind this is that you dont need to now setup unnecessary params, checkout our [examples](EXAMPLES.md)
