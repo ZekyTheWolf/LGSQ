@@ -2,9 +2,10 @@
 
 All notable changes to `lgsq` will be documented in this file
 
-## 1.1.3-BETA - 15.05.2023
+## 1.1.3 - 15.05.2023
 * Bug fix
 -> in_array() changed to isset()
+* Removed version from composer.json
 
 ## 1.1.2 - 06.05.2023
 * Removed ip, c_port, q_port, s_port
