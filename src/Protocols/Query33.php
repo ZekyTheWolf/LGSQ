@@ -7,7 +7,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\ParseString,
     Parse\Time,
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams,
 };
 
 class Query33
@@ -30,7 +31,7 @@ class Query33
         if ($ver) {
             fread($lgsl_fp, 4096);
         }
-        fwrite($lgsl_fp, "{$param[$ver][0]}{$server[SParams::BASIC]['c_port']}\n"); // select virtualserver
+        fwrite($lgsl_fp, "{$param[$ver][0]}{$server[SParams::BASIC][CParams::PORT]}\n"); // select virtualserver
         if (strtoupper(substr(fread($lgsl_fp, 4096), -4, -2)) != 'OK') {
             return false;
         }

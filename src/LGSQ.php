@@ -25,7 +25,7 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.1.3-BETA';
+    public const LGSQ_VERSION = '1.1.4';
 
     /**
      * 

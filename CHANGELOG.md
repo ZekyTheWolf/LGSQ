@@ -2,6 +2,12 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.1.4 - 20.5.2023
+* Fix Query36 Undefined array key "welcome_screen".
+* Fix Query36 when rate limited, error code 1015.
+* Fix Query05 remove old param (e)
+* Fix Query33 remove old param (c_port)
+
 ## 1.1.3 - 15.05.2023
 * Bug fix
 -> in_array() changed to isset()

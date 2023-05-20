@@ -159,7 +159,7 @@ class Query05
         $response_type = Byte::get($buffer, 1);
 
         if ($response_type == "I") { // SOURCE INFO ( HALF-LIFE 2 )
-            $server['e']['netcode']     = ord(Byte::get($buffer, 1));
+            $server[SParams::CONVARS]['netcode']     = ord(Byte::get($buffer, 1));
 
             $server[SParams::SERVER]['name']        = ParseString::get($buffer);
             $server[SParams::SERVER]['map']         = ParseString::get($buffer);
