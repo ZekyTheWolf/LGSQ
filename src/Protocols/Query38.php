@@ -2,7 +2,10 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\EServerParams as SParams;
+use ZekyWolf\LGSQ\Helpers\{
+    EServerParams as SParams,
+    EConnectionParams as CParams
+};
 
 class Query38
 {
@@ -12,7 +15,7 @@ class Query38
             return false;
         }
 
-        curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['q_port']}/v2/server/status?players=true");
+        curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}/v2/server/status?players=true");
         $buffer = curl_exec($lgsl_fp);
         $buffer = json_decode($buffer, true);
 

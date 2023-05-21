@@ -2,23 +2,26 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\EServerParams as SParams;
+use ZekyWolf\LGSQ\Helpers\{
+    EServerParams as SParams,
+    EConnectionParams as CParams
+};
 
 class Query40
 {
     public static function get(&$server, &$lgsl_need, &$lgsl_fp) // HTTP CRAWLER
     {
         $urls = array(
-          'farmsim' => "http://{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['q_port']}/index.html",
-          'eco' => "http://{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['q_port']}/info"
+          'farmsim' => "http://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}/index.html",
+          'eco' => "http://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}/info"
         );
-        curl_setopt($lgsl_fp, CURLOPT_URL, $urls[$server[SParams::BASIC]['type']]);
+        curl_setopt($lgsl_fp, CURLOPT_URL, $urls[$server[SParams::BASIC][CParams::TYPE]]);
         $buffer = curl_exec($lgsl_fp);
         if (!$buffer) {
             return false;
         }
 
-        switch ($server[SParams::BASIC]['type']) {
+        switch ($server[SParams::BASIC][CParams::TYPE]) {
             // Farming Simulator // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
             case 'farmsim': {
                 preg_match('/<h2>Login to [\w\d\s\/\\&@"\'-]+<\/h2>/', $buffer, $name);

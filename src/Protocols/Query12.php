@@ -7,7 +7,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Pascal,
     Parse\Unpack,
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams
 };
 
 class Query12
@@ -16,9 +17,9 @@ class Query12
     {
         //---------------------------------------------------------+
 
-        if ($server[SParams::BASIC]['type'] == "samp") {
+        if ($server[SParams::BASIC][CParams::TYPE] == "samp") {
             $challenge_packet = "SAMP\x21\x21\x21\x21\x00\x00";
-        } elseif ($server[SParams::BASIC]['type'] == "vcmp") {
+        } elseif ($server[SParams::BASIC][CParams::TYPE] == "vcmp") {
             $challenge_packet = "VCMP\x21\x21\x21\x21\x00\x00";
             $lgsl_need[RParams::CONVARS] = false;
         }
@@ -27,9 +28,9 @@ class Query12
             $challenge_packet .= "i";
         } elseif ($lgsl_need[RParams::CONVARS]) {
             $challenge_packet .= "r";
-        } elseif ($lgsl_need[RParams::PLAYERS] && $server[SParams::BASIC]['type'] == "samp") {
+        } elseif ($lgsl_need[RParams::PLAYERS] && $server[SParams::BASIC][CParams::TYPE] == "samp") {
             $challenge_packet .= "d";
-        } elseif ($lgsl_need[RParams::PLAYERS] && $server[SParams::BASIC]['type'] == "vcmp") {
+        } elseif ($lgsl_need[RParams::PLAYERS] && $server[SParams::BASIC][CParams::TYPE] == "vcmp") {
             $challenge_packet .= "c";
         }
 
@@ -57,7 +58,7 @@ class Query12
         if ($response_type == "i") {
             $lgsl_need[RParams::SERVER] = false;
 
-            if ($server[SParams::BASIC]['type'] == "vcmp") {
+            if ($server[SParams::BASIC][CParams::TYPE] == "vcmp") {
                 $buffer = substr($buffer, 12);
             }
 

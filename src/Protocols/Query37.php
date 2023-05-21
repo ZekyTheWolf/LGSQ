@@ -4,7 +4,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 
 use ZekyWolf\LGSQ\Helpers\{
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams
 };
 
 class Query37
@@ -18,7 +19,7 @@ class Query37
         $lgsl_need[RParams::CONVARS] = false;
         $lgsl_need[RParams::PLAYERS] = false;
 
-        curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.hellbz.de/scum/api.php?address={$server[SParams::BASIC]['ip']}&port={$server[SParams::BASIC]['c_port']}");
+        curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.hellbz.de/scum/api.php?address={$server[SParams::BASIC][CParams::IP]}&port={$server[SParams::BASIC][CParams::PORT]}");
         $buffer = curl_exec($lgsl_fp);
         $buffer = json_decode($buffer, true);
 

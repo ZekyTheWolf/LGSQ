@@ -8,7 +8,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\ParseString,
     Parse\Time,
     Parse\Unpack,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query10
@@ -17,7 +18,7 @@ class Query10
     {
         //---------------------------------------------------------+
 
-        if ($server[SParams::BASIC]['type'] == "quakewars") {
+        if ($server[SParams::BASIC][CParams::TYPE] == "quakewars") {
             fwrite($lgsl_fp, "\xFF\xFFgetInfoEX\xFF");
         } else {
             fwrite($lgsl_fp, "\xFF\xFFgetInfo\xFF");
@@ -31,10 +32,10 @@ class Query10
 
         //---------------------------------------------------------+
 
-        if($server[SParams::BASIC]['type'] == "wolf2009") {
+        if($server[SParams::BASIC][CParams::TYPE] == "wolf2009") {
             $buffer = substr($buffer, 31);
         }  // REMOVE HEADERS
-        elseif ($server[SParams::BASIC]['type'] == "quakewars") {
+        elseif ($server[SParams::BASIC][CParams::TYPE] == "quakewars") {
             $buffer = substr($buffer, 33);
         } else {
             $buffer = substr($buffer, 23);
@@ -59,7 +60,7 @@ class Query10
 
         //---------------------------------------------------------+
 
-        if ($server[SParams::BASIC]['type'] == "wolf2009") {
+        if ($server[SParams::BASIC][CParams::TYPE] == "wolf2009") {
             // WOLFENSTEIN: (PID)(PING)(NAME)(TAGPOSITION)(TAG)(BOT)
             while ($buffer && $buffer[0] != "\x10") { // STOPS AT PID 16
                 $server[SParams::PLAYERS][$player_key]['pid']     = ord(Byte::get($buffer, 1));
@@ -85,7 +86,7 @@ class Query10
 
         //---------------------------------------------------------+
 
-        elseif ($server[SParams::BASIC]['type'] == "quakewars") {
+        elseif ($server[SParams::BASIC][CParams::TYPE] == "quakewars") {
             // QUAKEWARS: (PID)(PING)(NAME)(TAGPOSITION)(TAG)(BOT)
             while ($buffer && $buffer[0] != "\x20") { // STOPS AT PID 32
                 $server[SParams::PLAYERS][$player_key]['pid']  = ord(Byte::get($buffer, 1));
@@ -127,7 +128,7 @@ class Query10
 
         //---------------------------------------------------------+
 
-        elseif ($server[SParams::BASIC]['type'] == "quake4") {
+        elseif ($server[SParams::BASIC][CParams::TYPE] == "quake4") {
             // QUAKE4: (PID)(PING)(RATE)(NULLNULL)(NAME)(TAG)
             while ($buffer && $buffer[0] != "\x20") { // STOPS AT PID 32
                 $server[SParams::PLAYERS][$player_key]['pid']  = ord(Byte::get($buffer, 1));
@@ -164,7 +165,10 @@ class Query10
         $server[SParams::SERVER]['players']    = $server[SParams::PLAYERS] ? count($server[SParams::PLAYERS]) : 0;
         $server[SParams::SERVER]['playersmax'] = $server[SParams::CONVARS]['si_maxplayers'];
 
-        if ($server[SParams::BASIC]['type'] == "wolf2009" || $server[SParams::BASIC]['type'] == "quakewars") {
+        if (
+            $server[SParams::BASIC][CParams::TYPE] == "wolf2009" 
+            || $server[SParams::BASIC][CParams::TYPE] == "quakewars"
+        ) {
             $server[SParams::SERVER]['map']      = str_replace(".entities", "", $server[SParams::SERVER]['map']);
             $server[SParams::SERVER]['password'] = $server[SParams::CONVARS]['si_needpass'];
         } else {

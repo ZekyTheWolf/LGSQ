@@ -4,7 +4,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 
 use ZekyWolf\LGSQ\Helpers\{
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams
 };
 
 class Query09
@@ -74,9 +75,9 @@ class Query09
                 $server[SParams::SERVER]['game'] = $server[SParams::CONVARS]['game_id'];
             }    // BFVIETNAM
 
-            if ($server[SParams::BASIC]['type'] == "arma" || $server[SParams::BASIC]['type'] == "arma2") {
+            if ($server[SParams::BASIC][CParams::TYPE] == "arma" || $server[SParams::BASIC][CParams::TYPE] == "arma2") {
                 $server[SParams::SERVER]['map'] = $server[SParams::CONVARS]['mission'];
-            } elseif ($server[SParams::BASIC]['type'] == "vietcong2") {
+            } elseif ($server[SParams::BASIC][CParams::TYPE] == "vietcong2") {
                 $server[SParams::CONVARS]['extinfo_autobalance'] = ord($server[SParams::CONVARS]['extinfo'][18]) == 2 ? "off" : "on";
                 // [ 13 = Vietnam and RPG Mode 19 1b 99 9b ] [ 22 23 = Mounted MG Limit ]
                 // [ 27 = Idle Limit ] [ 18 = Auto Balance ] [ 55 = Chat and Blind Spectator 5a 5c da dc ]

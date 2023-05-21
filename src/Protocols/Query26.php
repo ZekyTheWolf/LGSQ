@@ -7,7 +7,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Pascal,
     Parse\Unpack,
     Parse\Crypt,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query26
@@ -24,7 +25,7 @@ class Query26
         } // REQUIRES http://www.php.net/zlib
 
         $packet = "\x0A\x00playerName\x06\x06\x00query\x00";
-        Crypt::get($server[SParams::BASIC]['type'], $packet, true);
+        Crypt::get($server[SParams::BASIC][CParams::TYPE], $packet, true);
         fwrite($lgsl_fp, "\x4A\x35\xFF\xFF\x02\x00\x02\x00\x01\x00{$packet}");
 
         $buffer = array();
@@ -58,7 +59,7 @@ class Query26
 
         $buffer = implode("", $buffer);
 
-        Crypt::get($server[SParams::BASIC]['type'], $buffer, false);
+        Crypt::get($server[SParams::BASIC][CParams::TYPE], $buffer, false);
 
         $buffer = @gzuncompress($buffer);
 

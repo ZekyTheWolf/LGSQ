@@ -12,8 +12,8 @@ use ZekyWolf\LGSQ\{
 };
 
 $lgsq = new LGSQ(
-    Games::URBANTERROR,
     [
+        EConnectionParams::TYPE => Games::URBANTERROR,
         EConnectionParams::IP => '176.9.28.206', 
         EConnectionParams::PORT => 27971, 
         EConnectionParams::QPORT => 27971
@@ -50,8 +50,8 @@ echo 'Players: '.$result[EServerParams::SERVER]['players'].'/'.$result[EServerPa
 require_once __DIR__.'/vendor/autoload.php';
 
 $lgsq = new LGSQ(
-    Games::DISCORD,
     [
+        EConnectionParams::TYPE => Games::DISCORD,
         EConnectionParams::IP => 'nDuNTC6'
     ],
     [

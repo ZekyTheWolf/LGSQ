@@ -8,7 +8,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Unpack,
     Parse\ParseString,
     Parse\Time,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query27
@@ -167,7 +168,7 @@ class Query27
         }
         if ($response_flag & 0x00100000) {
             for ($i=0; $i<$server[SParams::SERVER]['players']; $i++) {
-                $server[SParams::PLAYERS][$i]['name']      = Colors::get(ParseString::get($buffer), $server[SParams::BASIC]['type']);
+                $server[SParams::PLAYERS][$i]['name']      = Colors::get(ParseString::get($buffer), $server[SParams::BASIC][CParams::TYPE]);
                 $server[SParams::PLAYERS][$i]['score']     = Unpack::get(Byte::get($buffer, 2), "s");
                 $server[SParams::PLAYERS][$i]['ping']      = Unpack::get(Byte::get($buffer, 2), "S");
                 $server[SParams::PLAYERS][$i]['spectator'] = ord(Byte::get($buffer, 1));

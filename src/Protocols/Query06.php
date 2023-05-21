@@ -6,7 +6,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Byte,
     Parse\Colors,
     Parse\ParseString,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query06
@@ -18,7 +19,7 @@ class Query06
 
         $challenge_code = "";
 
-        if ($server[SParams::BASIC]['type'] != "bf2" && $server[SParams::BASIC]['type'] != "graw") {
+        if ($server[SParams::BASIC][CParams::TYPE] != "bf2" && $server[SParams::BASIC][CParams::TYPE] != "graw") {
             fwrite($lgsl_fp, "\xFE\xFD\x09\x21\x21\x21\x21\xFF\xFF\xFF\x01");
 
             $challenge_packet = fread($lgsl_fp, 4096);
@@ -61,7 +62,7 @@ class Query06
             }
 
             $buffer[$packet_order] = $packet;
-            if ($server[SParams::BASIC]['type'] == "minecraft" || $server[SParams::BASIC]['type'] == "jc2mp") {
+            if ($server[SParams::BASIC][CParams::TYPE] == "minecraft" || $server[SParams::BASIC][CParams::TYPE] == "jc2mp") {
                 $packet_total = 1;
             }
 
@@ -121,12 +122,12 @@ class Query06
             }
         }
 
-        if ($server[SParams::BASIC]['type'] == "bf2" || $server[SParams::BASIC]['type'] == "bf2142") {
+        if ($server[SParams::BASIC][CParams::TYPE] == "bf2" || $server[SParams::BASIC][CParams::TYPE] == "bf2142") {
             $server[SParams::SERVER]['map'] = ucwords(str_replace("_", " ", $server[SParams::SERVER]['map']));
         } // MAP NAME CONSISTENCY
-        elseif ($server[SParams::BASIC]['type'] == "jc2mp") {
+        elseif ($server[SParams::BASIC][CParams::TYPE] == "jc2mp") {
             $server[SParams::SERVER]['map'] = 'Panau';
-        } elseif ($server[SParams::BASIC]['type'] == "minecraft") {
+        } elseif ($server[SParams::BASIC][CParams::TYPE] == "minecraft") {
             if (isset($server[SParams::CONVARS]['gametype'])) {
                 $server[SParams::SERVER]['game'] = strtolower($server[SParams::CONVARS]['game_id']);
             }

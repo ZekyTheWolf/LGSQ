@@ -5,7 +5,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 use ZekyWolf\LGSQ\Helpers\{
     Parse\Colors,
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams,
 };
 
 class Query35
@@ -16,7 +17,7 @@ class Query35
             return false;
         }
 
-        curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['q_port']}/dynamic.json");
+        curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}/dynamic.json");
         $buffer = curl_exec($lgsl_fp);
         $buffer = json_decode($buffer, true);
 
@@ -37,7 +38,7 @@ class Query35
         if ($lgsl_need[RParams::PLAYERS]) {
             $lgsl_need[RParams::PLAYERS] = false;
 
-            curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['q_port']}/players.json");
+            curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}/players.json");
             $buffer = curl_exec($lgsl_fp);
             $buffer = json_decode($buffer, true);
 

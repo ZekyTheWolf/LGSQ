@@ -6,6 +6,7 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Colors,
     Parse\Time,
     EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query02
@@ -14,14 +15,14 @@ class Query02
     {
         //---------------------------------------------------------+
 
-        if($server[SParams::BASIC]['type'] == "quake2") {
+        if($server[SParams::BASIC][CParams::TYPE] == "quake2") {
             fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFstatus");
-        } elseif ($server[SParams::BASIC]['type'] == "warsowold") {
+        } elseif ($server[SParams::BASIC][CParams::TYPE] == "warsowold") {
             fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo");
-        } elseif ($server[SParams::BASIC]['type'] == "callofdutyiw") {
+        } elseif ($server[SParams::BASIC][CParams::TYPE] == "callofdutyiw") {
             fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo LGSL");
         } // IW6x
-        elseif (strpos($server[SParams::BASIC]['type'], "moh") !== false) {
+        elseif (strpos($server[SParams::BASIC][CParams::TYPE], "moh") !== false) {
             fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x02getstatus");
         } // mohaa_ mohaab_ mohaas_ mohpa_
         else {
@@ -37,7 +38,7 @@ class Query02
         //---------------------------------------------------------+
 
         $part = explode("\n", $buffer);  // SPLIT INTO PARTS: HEADER/SETTINGS/PLAYERS/FOOTER
-        if ($server[SParams::BASIC]['type'] !== "callofdutyiw") {
+        if ($server[SParams::BASIC][CParams::TYPE] !== "callofdutyiw") {
             array_pop($part);              // REMOVE FOOTER WHICH IS EITHER NULL OR "\challenge\"
         }
         $item = explode("\\", $part[1]); // SPLIT PART INTO ITEMS
@@ -101,23 +102,23 @@ class Query02
 
         //---------------------------------------------------------+
 
-        if ($server[SParams::BASIC]['type'] == "nexuiz") {
+        if ($server[SParams::BASIC][CParams::TYPE] == "nexuiz") {
             // (SCORE) (PING) (TEAM IF TEAM GAME) "(NAME)"
             $pattern = "/(.*) (.*) (.*)\"(.*)\"/U";
             $fields = [ 1 => "score", 2 => "ping", 3 => "team", 4 => "name" ];
-        } elseif ($server[SParams::BASIC]['type'] == "warsow") {
+        } elseif ($server[SParams::BASIC][CParams::TYPE] == "warsow") {
             // (SCORE) (PING) "(NAME)" (TEAM)
             $pattern = "/(.*) (.*) \"(.*)\" (.*)/";
             $fields = [ 1 => "score", 2 => "ping", 3 => "name", 4 => "team" ];
-        } elseif ($server[SParams::BASIC]['type'] == "sof2") {
+        } elseif ($server[SParams::BASIC][CParams::TYPE] == "sof2") {
             // (SCORE) (PING) "(NAME)"
             $pattern = "/(.*) (.*) \"(.*)\"/";
             $fields = [ 1 => "score", 2 => "ping", 3 => "name" ];
-        } elseif (strpos($server[SParams::BASIC]['type'], "mohpa") !== false) {
+        } elseif (strpos($server[SParams::BASIC][CParams::TYPE], "mohpa") !== false) {
             // (?) (SCORE) (?) (TIME) (?) "(RANK?)" "(NAME)"
             $pattern = "/(.*) (.*) (.*) (.*) (.*) \"(.*)\" \"(.*)\"/";
             $fields = [ 2 => "score", 3 => "deaths", 4 => "time", 6 => "rank", 7 => "name" ];
-        } elseif (strpos($server[SParams::BASIC]['type'], "moh") !== false) {
+        } elseif (strpos($server[SParams::BASIC][CParams::TYPE], "moh") !== false) {
             // (PING) "(NAME)"
             $pattern = "/(.*) \"(.*)\"/";
             $fields = [ 1 => "ping", 2 => "name" ];

@@ -4,7 +4,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 
 use ZekyWolf\LGSQ\Helpers\{
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams
 };
 
 class Query36
@@ -20,7 +21,7 @@ class Query36
         curl_setopt(
             $lgsl_fp,
             CURLOPT_URL,
-            "https://discord.com/api/v10/invites/{$server[SParams::BASIC]['ip']}?with_counts=true"
+            "https://discord.com/api/v10/invites/{$server[SParams::BASIC][CParams::IP]}?with_counts=true"
         );
 
         $buffer = curl_exec($lgsl_fp);

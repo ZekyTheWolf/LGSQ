@@ -6,7 +6,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Byte,
     Parse\Colors,
     Parse\Pascal,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query08
@@ -29,7 +30,7 @@ class Query08
 
         $server[SParams::CONVARS]['gamename']   = Pascal::get($buffer, 1, -1);
         $server[SParams::CONVARS]['hostport']   = Pascal::get($buffer, 1, -1);
-        $server[SParams::SERVER]['name']       = Colors::get(Pascal::get($buffer, 1, -1), $server[SParams::BASIC]['type']);
+        $server[SParams::SERVER]['name']       = Colors::get(Pascal::get($buffer, 1, -1), $server[SParams::BASIC][CParams::TYPE]);
         $server[SParams::CONVARS]['gamemode']   = Pascal::get($buffer, 1, -1);
         $server[SParams::SERVER]['map']        = Pascal::get($buffer, 1, -1);
         $server[SParams::CONVARS]['version']    = Pascal::get($buffer, 1, -1);
@@ -57,14 +58,14 @@ class Query08
             if($bit_flags == "\x3D") {
                 $field_list = [ "name", "score", "", "time" ];
             } // FARCRY PLAYERS CONNECTING
-            elseif ($server[SParams::BASIC]['type'] == "farcry") {
+            elseif ($server[SParams::BASIC][CParams::TYPE] == "farcry") {
                 $field_list = [ "name", "team", "", "score", "ping", "time" ];
             } // FARCRY PLAYERS JOINED
-            elseif ($server[SParams::BASIC]['type'] == "mta") {
+            elseif ($server[SParams::BASIC][CParams::TYPE] == "mta") {
                 $field_list = [ "name", "", "", "score", "ping", "" ];
-            } elseif ($server[SParams::BASIC]['type'] == "painkiller") {
+            } elseif ($server[SParams::BASIC][CParams::TYPE] == "painkiller") {
                 $field_list = [ "name", "", "skin",  "score", "ping", "" ];
-            } elseif ($server[SParams::BASIC]['type'] == "soldat") {
+            } elseif ($server[SParams::BASIC][CParams::TYPE] == "soldat") {
                 $field_list = [ "name", "team", "", "score", "ping", "time" ];
             }
 
@@ -76,7 +77,7 @@ class Query08
                 }
 
                 if ($item_key == "name") {
-                    Colors::get($item_value, $server[SParams::BASIC]['type']);
+                    Colors::get($item_value, $server[SParams::BASIC][CParams::TYPE]);
                 }
 
                 $server[SParams::PLAYERS][$player_key][$item_key] = $item_value;

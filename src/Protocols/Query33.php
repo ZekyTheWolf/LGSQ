@@ -16,7 +16,7 @@ class Query33
     public static function get(&$server, &$lgsl_need, &$lgsl_fp)
     {
         $buffer = fread($lgsl_fp, 4096);
-        if ($server[SParams::BASIC]['type'] === 'teaspeak') {
+        if ($server[SParams::BASIC][CParams::TYPE] === 'teaspeak') {
             if (strpos($buffer, 'TeaSpeak') === false && strpos(fread($lgsl_fp, 4096), 'TeaSpeak') === false) {
                 return false;
             }
@@ -25,7 +25,7 @@ class Query33
                 return false;
             }
         }
-        $ver = $server[SParams::BASIC]['type'] === 'ts' ? 0 : 1;
+        $ver = $server[SParams::BASIC][CParams::TYPE] === 'ts' ? 0 : 1;
         $param[0] = [ 'sel ', 'si', "\r\n", 'pl' ];
         $param[1] = [ 'use port=', 'serverinfo', ' ', 'clientlist -country', 'channellist -topic' ];
         if ($ver) {
@@ -58,7 +58,7 @@ class Query33
             return false;
         }
         $server[SParams::SERVER]['name']         = $ver ? Escape::get($items['name']) : $items['name'];
-        $server[SParams::SERVER]['map']          = $server[SParams::BASIC]['type'];
+        $server[SParams::SERVER]['map']          = $server[SParams::BASIC][CParams::TYPE];
         $server[SParams::SERVER]['players']      = intval($items[$ver ? 'clientsonline' : 'currentusers']);
         $server[SParams::SERVER]['playersmax']   = intval($items[$ver ? 'maxclients' : 'maxusers']);
         $server[SParams::SERVER]['password']     = intval($items[$ver ? 'flag_password' : 'password']);

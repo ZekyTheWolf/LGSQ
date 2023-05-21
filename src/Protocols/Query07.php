@@ -4,7 +4,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 
 use ZekyWolf\LGSQ\Helpers\{
     Parse\Colors,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query07
@@ -50,7 +51,7 @@ class Query07
             $server[SParams::PLAYERS][$key]['score']       = $match[2];
             $server[SParams::PLAYERS][$key]['time']        = $match[3];
             $server[SParams::PLAYERS][$key]['ping']        = $match[4];
-            $server[SParams::PLAYERS][$key]['name']        = Colors::get($match[5], $server['b']['type']);
+            $server[SParams::PLAYERS][$key]['name']        = Colors::get($match[5], $server[SParams::BASIC][CParams::TYPE]);
             $server[SParams::PLAYERS][$key]['skin']        = $match[6];
             $server[SParams::PLAYERS][$key]['skin_top']    = $match[7];
             $server[SParams::PLAYERS][$key]['skin_bottom'] = $match[8];

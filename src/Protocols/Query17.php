@@ -6,6 +6,7 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\ParseString,
     Parse\Colors,
     EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query17
@@ -34,7 +35,7 @@ class Query17
 
             $value = ParseString::get($buffer, 0, "\xFF");
             $value = str_replace("\x00", "", $value);
-            $value = ParseString::get($value, $server[SParams::BASIC]['type']);
+            $value = ParseString::get($value, $server[SParams::BASIC][CParams::TYPE]);
 
             $server[SParams::CONVARS][$key] = $value;
         }
@@ -68,7 +69,7 @@ class Query17
                 continue;
             }
 
-            $server[SParams::PLAYERS][$player_key]['name'] = Colors::get(substr($value, 1), $server[SParams::BASIC]['type']);
+            $server[SParams::PLAYERS][$player_key]['name'] = Colors::get(substr($value, 1), $server[SParams::BASIC][CParams::TYPE]);
             $server[SParams::PLAYERS][$player_key]['team'] = $server[SParams::TEAMS][$team_key]['name'];
 
             $player_key++;

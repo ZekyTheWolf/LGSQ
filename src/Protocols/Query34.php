@@ -4,7 +4,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 
 use ZekyWolf\LGSQ\Helpers\{
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams
 };
 
 class Query34
@@ -22,8 +23,8 @@ class Query34
         $buffer = curl_exec($lgsl_fp);
         $buffer = json_decode($buffer, true);
 
-        if (isset($buffer["{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['c_port']}"])) {
-            $value = $buffer["{$server[SParams::BASIC]['ip']}:{$server[SParams::BASIC]['c_port']}"];
+        if (isset($buffer["{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::PORT]}"])) {
+            $value = $buffer["{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::PORT]}"];
             $server[SParams::SERVER]['name']       = $value['name'];
             $server[SParams::SERVER]['map']        = "ragemp";
             $server[SParams::SERVER]['players']    = $value['players'];

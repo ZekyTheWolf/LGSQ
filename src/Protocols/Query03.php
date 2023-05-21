@@ -5,7 +5,8 @@ namespace ZekyWolf\LGSQ\Protocols;
 use ZekyWolf\LGSQ\Helpers\{
     Parse\ParseString,
     ERequestParams as RParams,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query03
@@ -16,7 +17,7 @@ class Query03
 
         // BF1942 BUG: RETURNS 'GHOST' NAMES - TO SKIP THESE WE NEED AN [s] REQUEST FOR AN ACCURATE PLAYER COUNT
         if (
-            $server[SParams::BASIC]['type'] == "bf1942" &&
+            $server[SParams::BASIC][CParams::TYPE] == "bf1942" &&
             $lgsl_need[RParams::PLAYERS] &&
             !$lgsl_need[RParams::SERVER] &&
             !isset($lgsl_need[RParams::SERVER]) &&
@@ -26,7 +27,7 @@ class Query03
             $lgsl_need[RParams::PLAYERS] = true;
         }
 
-        if($server[SParams::BASIC]['type'] == "cncrenegade") {
+        if($server[SParams::BASIC][CParams::TYPE] == "cncrenegade") {
             fwrite($lgsl_fp, "\\status\\");
         } elseif($lgsl_need[RParams::SERVER] || $lgsl_need[RParams::CONVARS]) {
             fwrite($lgsl_fp, "\\basic\\\\info\\\\rules\\");
@@ -133,7 +134,7 @@ class Query03
             if (!empty($server[SParams::CONVARS]['gameid']) && empty($server[SParams::CONVARS]['gamename'])) {
                 $server[SParams::SERVER]['game'] = $server[SParams::CONVARS]['gameid'];
             }
-            if (!empty($server[SParams::CONVARS]['gameid']) && $server[SParams::BASIC]['type'] == "bf1942") {
+            if (!empty($server[SParams::CONVARS]['gameid']) && $server[SParams::BASIC][CParams::TYPE] == "bf1942") {
                 $server[SParams::SERVER]['game'] = $server[SParams::CONVARS]['gameid'];
             }
         }
@@ -142,7 +143,7 @@ class Query03
 
         if ($server[SParams::PLAYERS]) {
             // BF1942 BUG - REMOVE 'GHOST' PLAYERS
-            if ($server[SParams::BASIC]['type'] == "bf1942" && $server[SParams::SERVER]['players']) {
+            if ($server[SParams::BASIC][CParams::TYPE] == "bf1942" && $server[SParams::SERVER]['players']) {
                 $server[SParams::PLAYERS] = array_slice(
                     $server[SParams::PLAYERS],
                     0,
@@ -158,7 +159,7 @@ class Query03
             }
 
             // AVP2 BUG: PLAYER NUMBER PREFIXED TO NAMES
-            if ($server[SParams::BASIC]['type'] == "avp2") {
+            if ($server[SParams::BASIC][CParams::TYPE] == "avp2") {
                 foreach ($server[SParams::BASIC] as $key => $value) {
                     $server[SParams::BASIC][$key]['name'] = preg_replace(
                         "/[0-9]+~/",

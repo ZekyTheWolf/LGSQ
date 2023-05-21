@@ -53,12 +53,11 @@ class LGSQ
      * this way you can avoid any potential errors.
      */
     public function __construct(
-        string $type,
         array $serverData,
         array $request = [],
         array $cdata = [],
     ) {
-        $this->type = $type;
+        $this->type = $serverData[CParams::TYPE];
         $this->request  = $request;
 
         $this->server = [

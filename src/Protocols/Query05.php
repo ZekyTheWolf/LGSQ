@@ -8,7 +8,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Time,
     Parse\Unpack,
     ERequestParams as RParams,
-    EServerParams as SParams
+    EServerParams as SParams,
+    EConnectionParams as CParams
 };
 
 class Query05
@@ -18,7 +19,7 @@ class Query05
         //---------------------------------------------------------+
         //  REFERENCE: http://developer.valvesoftware.com/wiki/Server_Queries
 
-        if ($server[SParams::BASIC]['type'] == "halflifewon") {
+        if ($server[SParams::BASIC][CParams::TYPE] == "halflifewon") {
             if($lgsl_need[RParams::SERVER]) {
                 fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFdetails\x00");
             } elseif ($lgsl_need[RParams::CONVARS]) {

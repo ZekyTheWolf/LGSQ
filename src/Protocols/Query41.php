@@ -6,7 +6,8 @@ use ZekyWolf\LGSQ\Helpers\{
     Parse\Byte,
     Parse\Unpack,
     EServerParams as SParams,
-    ERequestParams as RParams
+    ERequestParams as RParams,
+    EConnectionParams as CParams
 };
 
 class Query41
@@ -20,7 +21,7 @@ class Query41
         $lgsl_need[RParams::CONVARS] = false;
         $lgsl_need[RParams::PLAYERS] = false;
 
-        if ($server[SParams::BASIC]['type'] == 'wow') {
+        if ($server[SParams::BASIC][CParams::TYPE] == 'wow') {
             $buffer = fread($lgsl_fp, 5);
             if ($buffer && $buffer == "\x00\x2A\xEC\x01\x01") {
                 $server[SParams::SERVER]['name']        = "World of Warcraft Server";
@@ -29,7 +30,7 @@ class Query41
             }
             return false;
         }
-        if ($server[SParams::BASIC]['type'] == 'sf') {
+        if ($server[SParams::BASIC][CParams::TYPE] == 'sf') {
             fwrite($lgsl_fp, "\x00\x00\xd6\x9c\x28\x25\x00\x00\x00\x00");
             $buffer = fread($lgsl_fp, 128);
             if (!$buffer) {

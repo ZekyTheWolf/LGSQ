@@ -2,6 +2,12 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.1.4-2 - 21.5.2023
+* Moved game type to server data
+* Removed old static params (c_port, q_port, type)
+* Example update
+* Discord api update to v10
+
 ## 1.1.4 - 20.5.2023
 * Fix Query36 Undefined array key "welcome_screen".
 * Fix Query36 when rate limited, error code 1015.
