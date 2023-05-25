@@ -54,7 +54,7 @@ class LGSQ
      */
     public function __construct(
         array $serverData,
-        array $request = [],
+        array $request = [ RParams::SERVER, RParams::CONVARS, RParams::PLAYERS ],
         array $cdata = [],
     ) {
         $this->type = $serverData[CParams::TYPE];

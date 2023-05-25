@@ -63,9 +63,9 @@ class Query16
 
         //---------------------------------------------------------+
 
-        $server[SParams::SERVER]['password']    = ($server['e']['packed_special'] & 2) ? 1 : 0;
-        $server[SParams::CONVARS]['racecast']    = ($server['e']['packed_special'] & 4) ? 1 : 0;
-        $server[SParams::CONVARS]['fixedsetups'] = ($server['e']['packed_special'] & 16) ? 1 : 0;
+        $server[SParams::SERVER]['password']    = ($server[SParams::CONVARS]['packed_special'] & 2) ? 1 : 0;
+        $server[SParams::CONVARS]['racecast']    = ($server[SParams::CONVARS]['packed_special'] & 4) ? 1 : 0;
+        $server[SParams::CONVARS]['fixedsetups'] = ($server[SParams::CONVARS]['packed_special'] & 16) ? 1 : 0;
 
         $server[SParams::CONVARS]['aids']  = "";
         if ($server[SParams::CONVARS]['packed_aids'] & 1) {
@@ -80,8 +80,8 @@ class Query16
         if ($server[SParams::CONVARS]['packed_aids'] & 8) {
             $server[SParams::CONVARS]['aids'] .= " AutoShifting";
         }
-        if ($server['e']['packed_aids'] & 16) {
-            $server['e']['aids'] .= " AutoClutch";
+        if ($server[SParams::CONVARS]['packed_aids'] & 16) {
+            $server[SParams::CONVARS]['aids'] .= " AutoClutch";
         }
         if ($server[SParams::CONVARS]['packed_aids'] & 32) {
             $server[SParams::CONVARS]['aids'] .= " Invulnerability";
@@ -90,7 +90,7 @@ class Query16
             $server[SParams::CONVARS]['aids'] .= " OppositeLock";
         }
         if ($server[SParams::CONVARS]['packed_aids'] & 128) {
-            $server['e']['aids'] .= " SteeringHelp";
+            $server[SParams::CONVARS]['aids'] .= " SteeringHelp";
         }
         if ($server[SParams::CONVARS]['packed_aids'] & 256) {
             $server[SParams::CONVARS]['aids'] .= " BrakingHelp";
@@ -102,8 +102,8 @@ class Query16
             $server[SParams::CONVARS]['aids'] .= " AutoPitstop";
         }
 
-        $server[SParams::CONVARS]['aids']     = str_replace(" ", " / ", trim($server['e']['aids']));
-        $server[SParams::CONVARS]['vehicles'] = str_replace("|", " / ", trim($server['e']['vehicles']));
+        $server[SParams::CONVARS]['aids']     = str_replace(" ", " / ", trim($server[SParams::CONVARS]['aids']));
+        $server[SParams::CONVARS]['vehicles'] = str_replace("|", " / ", trim($server[SParams::CONVARS]['vehicles']));
 
         unset($server[SParams::CONVARS]['packed_aids']);
         unset($server[SParams::CONVARS]['packed_flags']);

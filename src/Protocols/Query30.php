@@ -69,8 +69,8 @@ class Query30
 
             // CONVERT MAP NUMBER TO DESCRIPTIVE NAME
 
-            $server[SParams::CONVARS]['level'] = $server['s']['map'];
-            $map_check = strtolower($server['s']['map']);
+            $server[SParams::CONVARS]['level'] = $server[SParams::SERVER]['map'];
+            $map_check = strtolower($server[SParams::SERVER]['map']);
 
             if (strpos($map_check, "mp_001") !== false) {
                 $server[SParams::SERVER]['map'] = "Panama Canal";
@@ -121,7 +121,7 @@ class Query30
                             break;
                         }
                         case "name": {
-                            $server[SParams::PLAYERS][$i]['name']  = empty($server['p'][$i]['name']) ? $value : "[{$server[SParams::PLAYERS][$i]['name']}] {$value}";
+                            $server[SParams::PLAYERS][$i]['name']  = empty($server[SParams::PLAYERS][$i]['name']) ? $value : "[{$server[SParams::PLAYERS][$i]['name']}] {$value}";
                             break;
                         }
                         case "teamid": {

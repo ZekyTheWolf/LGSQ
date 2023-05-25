@@ -80,7 +80,7 @@ class Query11
             $server[SParams::CONVARS]['mutators_default'] .= " NoPowerups";
         }
         if ($tmp & 128) {
-            $server['e']['mutators_default'] .= " NoTranslocator";
+            $server[SParams::CONVARS]['mutators_default'] .= " NoTranslocator";
         }
         if ($tmp & 256) {
             $server[SParams::CONVARS]['mutators_default'] .= " Slomo";

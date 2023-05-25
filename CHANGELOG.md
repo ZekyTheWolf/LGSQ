@@ -2,6 +2,14 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.1.4-3 - 25.5.2023
+* Set default params in LGSQ class when created request.
+* [EXAMPLES](./EXAMPLES.md) update.
+* Fix Query11, removed old props.
+* Fix Query16, removed old props.
+* Fix Query30, removed old props.
+* Removed old examples from docs to avoid confussion.
+
 ## 1.1.4-2 - 21.5.2023
 * Moved game type to server data
 * Removed old static params (c_port, q_port, type)
@@ -22,22 +30,6 @@ All notable changes to `lgsq` will be documented in this file
 ## 1.1.2 - 06.05.2023
 * Removed ip, c_port, q_port, s_port
 -> Now you will use array instead of directly params, reason behind this is that you dont need to now setup unnecessary params, checkout our [examples](EXAMPLES.md)
-```php
-$lgsq = new LGSQ(
-    Games::<game>,
-    [
-        EConnectionParams::IP => 'ip/hostname',
-        EConnectionParams::PORT => <server port>,    // ->
-        EConnectionParams::QPORT => <query port>,    // -> If not provided, automaticly set to 1
-        EConnectionParams::SPORT => <server port>    // ->
-    ],
-    [
-        ERequestParams::SERVER, 
-        ERequestParams::CONVARS, 
-        ERequestParams::PLAYERS
-    ]
-)
-```
 + Created games class (Games::<game to query>).
 + Created Connection params, recommend using when setting up server.
 * Custom data moved directly in to server params, can be retrive via function getCustomData()
@@ -49,39 +41,5 @@ $lgsq = new LGSQ(
 
 - initial release
 - New request method
-```php
-/**
- * 
- * @param $type         Game type
- * @param $ip           Server IP/Hostname
- * @param $c_port       Connection port
- * @param $q_port       Query Port
- * @param $request      Requested data, 
- *                      valid: 
- *                          > Array string, only those 3 are valid, any others will be ignored
- *                          [ "s", "p", "c" ]
- *                          > Or usage via ERequestParams abastract class:
- *                          [ RParams::SERVER, SParams::PLAYERS, SParams::CONVARS]
- * @param $cdata        Custom data, default []
- * @param $s_port       Server port, default 0
- * 
- * @noreturn
- *
- * Explanation:
- * Since this is rebuild of LGSL to be more compatibile with Laravel and more PHP Frameworks
- * i decided to make few changes, one visible is in $request.
- *
- * Request is now a array of values, you can use directly 's', 'p', 'c' for specified request
- * but i would recommend using abstract class of ERequestParams where are stored params for request
- * this way you can avoid any potential errors.
- */
-$lgsq = new LGSQ('<game type>', '<ip>', <connection port>, <query port>,
-    [
-        ERequestParams::SERVER, 
-        ERequestParams::CONVARS, 
-        ERequestParams::PLAYERS
-    ]
-)
-```
 - PSR4
 
