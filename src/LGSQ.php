@@ -2,12 +2,13 @@
 
 namespace ZekyWolf\LGSQ;
 
+use Exception;
 use ZekyWolf\LGSQ\Helpers\{
     ERequestParams as RParams,
     EServerParams as SParams,
     EConnectionParams as CParams,
-    Games,
-    GameTypeScheme,
+    Protocols,
+    ProtocolsTypeScheme,
     ProtocolList
 };
 
@@ -16,7 +17,6 @@ class LGSQ
     /**
      * Recommend using Games scheme.
      */
-    private string $type;
     private array $request;
     private array $server;
 
@@ -25,20 +25,20 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.2.0';
+    public const LGSQ_VERSION = '1.3.0';
 
     /**
-     * 
+     *
      * @param $type
      * @param $serverData
      * @param $request
      * @param $cdata
      * @param $s_port
-     * 
+     *
      * @noreturn
      * Valid Data for $serverData param
      * Data for query server in array [ 'ip' => '1.0.0.0', 'port' => 1, 'qport' => 0 ]
-     * 
+     *
      * Valid Data for $request param
      * Array string, only those 3 are valid, any others will be ignored
      *      [ "s", "p", "c" ]
@@ -57,13 +57,19 @@ class LGSQ
         array $request = [ RParams::SERVER, RParams::CONVARS, RParams::PLAYERS ],
         array $cdata = [],
     ) {
-        $this->type = $serverData[CParams::TYPE];
-        $this->request  = $request;
+
+        if (!array_key_exists(CParams::TYPE, $serverData) || empty($serverData[CParams::TYPE])) {
+            throw new Exception("Missing server type key '" . CParams::TYPE . "'!");
+        }
+
+        if (!array_key_exists(CParams::IP, $serverData) || empty($serverData[CParams::IP])) {
+            throw new Exception("Missing server type key '" . CParams::IP . "'!");
+        }
 
         $this->server = [
             SParams::BASIC => [
-                CParams::TYPE => $this->type,
-                CParams::IP => $this->clearHostName($this->type, $serverData[CParams::IP]),
+                CParams::TYPE => $serverData[CParams::TYPE],
+                CParams::IP => $serverData[CParams::IP],
                 CParams::PORT => isset($serverData[CParams::PORT]) ? $serverData[CParams::PORT] : 1,
                 CParams::QPORT => isset($serverData[CParams::QPORT]) ? $serverData[CParams::QPORT] : 1,
                 CParams::SPORT => isset($serverData[CParams::SPORT]) ? $serverData[CParams::SPORT] : 1,
@@ -83,6 +89,8 @@ class LGSQ
             SParams::TEAMS => [],
             SParams::CUSTOM_DATA => $cdata,
         ];
+
+        $this->request  = $request;
 
         $this->CheckAndConnect();
     }
@@ -114,22 +122,23 @@ class LGSQ
          */
         $protocol = ProtocolList::get();
 
-        if (!isset($protocol[$this->type])) {
+        if (!isset($protocol[$this->server[SParams::BASIC][CParams::TYPE]])) {
             $this->server[SParams::BASIC]['status'] = 0;
             $this->server[SParams::BASIC]['_error'] = [
                 'LGSQ:',
-                $this->type ? "INVALID TYPE '{$this->type}'" : 'MISSING TYPE',
+                $this->server[SParams::BASIC][CParams::TYPE] ?
+                "INVALID TYPE '{$this->server[SParams::BASIC][CParams::TYPE]}'" : 'MISSING TYPE',
                 'For IP/HOSTNAME: '.$this->server[SParams::BASIC][CParams::IP].', Port: '.$this->server[SParams::BASIC][CParams::QPORT]
             ];
         }
 
-        $classCheck = "\\ZekyWolf\\LGSQ\\Protocols\\Query{$protocol[$this->type]}";
+        $classCheck = "\\ZekyWolf\\LGSQ\\Protocols\\Query{$protocol[$this->server[SParams::BASIC][CParams::TYPE]]}";
         if (!class_exists($classCheck)) {
             $this->server[SParams::BASIC]['status'] = 0;
             $this->server[SParams::BASIC]['_error'] = "Invalid query class name, {$classCheck}";
         }
 
-        if(!$this->server[SParams::BASIC]['_error']){
+        if(!$this->server[SParams::BASIC]['_error']) {
             $this->Retrive();
         }
     }
@@ -141,7 +150,7 @@ class LGSQ
     {
         $protocol = ProtocolList::get();
 
-        $class = "\\ZekyWolf\\LGSQ\\Protocols\\Query{$protocol[$this->type]}";
+        $class = "\\ZekyWolf\\LGSQ\\Protocols\\Query{$protocol[$this->server[SParams::BASIC][CParams::TYPE]]}";
 
         if ($class == '\\ZekyWolf\\LGSQ\\Protocols\\Query01') { // TEST RETURNS DIRECT
             $lgsl_need = '';
@@ -151,13 +160,18 @@ class LGSQ
             return $this->server;
         }
 
-        $response = $this->queryDirect($this->server, $this->request, $class, GameTypeScheme::get($this->type));
+        $response = $this->queryDirect(
+            $this->server,
+            $this->request,
+            $class,
+            ProtocolsTypeScheme::get($this->server[SParams::BASIC][CParams::TYPE])
+        );
 
         if (! $response) { // SERVER OFFLINE
             $this->server[SParams::BASIC]['status'] = 0;
         } else {
             if (empty($this->server[SParams::SERVER]['game'])) {
-                $this->server[SParams::SERVER]['game'] = $this->type;
+                $this->server[SParams::SERVER]['game'] = $this->server[SParams::BASIC][CParams::TYPE];
             }
             if (empty($this->server[SParams::SERVER]['map'])) {
                 $this->server[SParams::SERVER]['map'] = '-';
@@ -348,12 +362,12 @@ class LGSQ
         return $this->server[SParams::CUSTOM_DATA];
     }
 
-    private function clearHostName(string $type, string $ip): string
+    private function clearHostName(string $ip): string
     {
         if(
-            $type == Games::DISCORD && 
+            $this->server[SParams::BASIC][CParams::TYPE] == Protocols::DISCORD &&
             (str_contains($ip, 'discord.gg') || str_contains($ip, 'https://discord.gg'))
-        ){
+        ) {
             return str_replace([
                 'https://discord.gg/',
                 'discord.gg/',

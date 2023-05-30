@@ -87,12 +87,11 @@ class Query36
 
     public static function checkValue($value, $type = 1)
     {
-        if(isset($value)){
+        if(isset($value)) {
             return $value;
         }
 
-        switch($type)
-        {
+        switch($type) {
             case 1: { return "Value is undefined"; }
             case 2: { return 0; }
         }

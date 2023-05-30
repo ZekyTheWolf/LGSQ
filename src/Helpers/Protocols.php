@@ -2,7 +2,7 @@
 
 namespace ZekyWolf\LGSQ\Helpers;
 
-abstract class Games
+abstract class Protocols
 {
     /** Americas Army */
     public const AMERICASARMY               = 'aarmy';

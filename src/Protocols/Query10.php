@@ -166,7 +166,7 @@ class Query10
         $server[SParams::SERVER]['playersmax'] = $server[SParams::CONVARS]['si_maxplayers'];
 
         if (
-            $server[SParams::BASIC][CParams::TYPE] == "wolf2009" 
+            $server[SParams::BASIC][CParams::TYPE] == "wolf2009"
             || $server[SParams::BASIC][CParams::TYPE] == "quakewars"
         ) {
             $server[SParams::SERVER]['map']      = str_replace(".entities", "", $server[SParams::SERVER]['map']);

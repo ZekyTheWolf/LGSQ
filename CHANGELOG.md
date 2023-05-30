@@ -2,6 +2,17 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.3.0 - x.x.2023
+* Removed property $type from __construct in LGSQ class.
+* Created new checking function for TYPE/IP
+* Renamed class Games as Protocols since it is more convenient name for it.
+* Renamed class GameTypeScheme as ProtocolsTypeScheme since it is more convenient name for it.
+* Examples update
+* Code format
+
+## 1.2.0 - x.x.2023
+* Release
+
 ## 1.1.4-3 - 25.5.2023
 * Set default params in LGSQ class when created request.
 * [EXAMPLES](./EXAMPLES.md) update.
