@@ -2,7 +2,7 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\{
+use ZekyWolf\LGSQ\Params\{
     EServerParams as SParams,
     EConnectionParams as CParams
 };

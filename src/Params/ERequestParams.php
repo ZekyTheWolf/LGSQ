@@ -1,6 +1,6 @@
 <?php
 
-namespace ZekyWolf\LGSQ\Helpers;
+namespace ZekyWolf\LGSQ\Params;
 
 abstract class ERequestParams
 {

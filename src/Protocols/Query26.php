@@ -2,13 +2,13 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\{
-    Parse\Byte,
-    Parse\Pascal,
-    Parse\Unpack,
-    Parse\Crypt,
-    EServerParams as SParams,
-    EConnectionParams as CParams
+use ZekyWolf\LGSQ\{
+    Helpers\Parse\Byte,
+    Helpers\Parse\Pascal,
+    Helpers\Parse\Unpack,
+    Helpers\Parse\Crypt,
+    Params\EServerParams as SParams,
+    Params\EConnectionParams as CParams
 };
 
 class Query26

@@ -2,11 +2,11 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\{
-    Parse\ParseString,
-    ERequestParams as RParams,
-    EServerParams as SParams,
-    EConnectionParams as CParams
+use ZekyWolf\LGSQ\{
+    Helpers\Parse\ParseString,
+    Params\ERequestParams as RParams,
+    Params\EServerParams as SParams,
+    Params\EConnectionParams as CParams
 };
 
 class Query03

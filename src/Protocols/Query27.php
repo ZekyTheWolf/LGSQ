@@ -2,14 +2,14 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\{
-    Parse\Byte,
-    Parse\Colors,
-    Parse\Unpack,
-    Parse\ParseString,
-    Parse\Time,
-    EServerParams as SParams,
-    EConnectionParams as CParams
+use ZekyWolf\LGSQ\{
+    Helpers\Parse\Byte,
+    Helpers\Parse\Colors,
+    Helpers\Parse\Unpack,
+    Helpers\Parse\ParseString,
+    Helpers\Parse\Time,
+    Params\EServerParams as SParams,
+    Params\EConnectionParams as CParams
 };
 
 class Query27

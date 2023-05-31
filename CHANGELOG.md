@@ -2,7 +2,13 @@
 
 All notable changes to `lgsq` will be documented in this file
 
-## 1.3.0 - x.x.2023
+## 1.4.0 - 30.5.2023
+* Seperated params from Helpers folder and moved to own
+* Created setOption/getOption function to be able set custom curl timeout.
+* Created options abstract class to set available options
+* EXAMPLES.md update
+
+## 1.3.0 - 30.5.2023
 * Removed property $type from __construct in LGSQ class.
 * Created new checking function for TYPE/IP
 * Renamed class Games as Protocols since it is more convenient name for it.
@@ -10,7 +16,7 @@ All notable changes to `lgsq` will be documented in this file
 * Examples update
 * Code format
 
-## 1.2.0 - x.x.2023
+## 1.2.0 - 26.5.2023
 * Release
 
 ## 1.1.4-3 - 25.5.2023

@@ -2,11 +2,11 @@
 
 namespace ZekyWolf\LGSQ\Protocols;
 
-use ZekyWolf\LGSQ\Helpers\{
-    Parse\Colors,
-    EServerParams as SParams,
-    ERequestParams as RParams,
-    EConnectionParams as CParams,
+use ZekyWolf\LGSQ\{
+    Helpers\Parse\Colors,
+    Params\EServerParams as SParams,
+    Params\ERequestParams as RParams,
+    Params\EConnectionParams as CParams,
 };
 
 class Query35

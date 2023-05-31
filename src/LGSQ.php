@@ -2,18 +2,21 @@
 
 namespace ZekyWolf\LGSQ;
 
-use Exception;
-use ZekyWolf\LGSQ\Helpers\{
-    ERequestParams as RParams,
-    EServerParams as SParams,
-    EConnectionParams as CParams,
-    Protocols,
-    ProtocolsTypeScheme,
-    ProtocolList
+use ZekyWolf\LGSQ\{
+    Params\ERequestParams as RParams,
+    Params\EServerParams as SParams,
+    Params\EConnectionParams as CParams,
+    Helpers\ProtocolsTypeScheme,
+    Helpers\ProtocolList,
+    Traits\ValidateParamsTrait,
+    Traits\OptionsTrait,
 };
 
 class LGSQ
 {
+    use ValidateParamsTrait;
+    use OptionsTrait;
+
     /**
      * Recommend using Games scheme.
      */
@@ -25,32 +28,16 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.3.0';
+    public const LGSQ_VERSION = '1.4.0-DEV';
 
     /**
+     * Validate server data, connect and set data.
      *
-     * @param $type
-     * @param $serverData
-     * @param $request
-     * @param $cdata
-     * @param $s_port
+     * @param array $serverData
+     * @param array $request
+     * @param array $cdata
      *
-     * @noreturn
-     * Valid Data for $serverData param
-     * Data for query server in array [ 'ip' => '1.0.0.0', 'port' => 1, 'qport' => 0 ]
-     *
-     * Valid Data for $request param
-     * Array string, only those 3 are valid, any others will be ignored
-     *      [ "s", "p", "c" ]
-     * or usage via ERequestParams abastract class:
-     *      [ ERequestParams::SERVER, ERequestParams::PLAYERS, ERequestParams::CONVARS]
-     * Explanation:
-     * Since this is rebuild of LGSL to be more compatibile with Laravel and more PHP Frameworks
-     * i decided to make few changes, one visible is in $request.
-     *
-     * Request is now a array of values, you can use directly 's', 'p', 'c' for specified request
-     * but i would recommend using abstract class of ERequestParams where are stored params for request
-     * this way you can avoid any potential errors.
+     * @return void
      */
     public function __construct(
         array $serverData,
@@ -58,18 +45,12 @@ class LGSQ
         array $cdata = [],
     ) {
 
-        if (!array_key_exists(CParams::TYPE, $serverData) || empty($serverData[CParams::TYPE])) {
-            throw new Exception("Missing server type key '" . CParams::TYPE . "'!");
-        }
-
-        if (!array_key_exists(CParams::IP, $serverData) || empty($serverData[CParams::IP])) {
-            throw new Exception("Missing server type key '" . CParams::IP . "'!");
-        }
+        $this->validate($serverData);
 
         $this->server = [
             SParams::BASIC => [
                 CParams::TYPE => $serverData[CParams::TYPE],
-                CParams::IP => $serverData[CParams::IP],
+                CParams::IP => $this->clearHostName($serverData[CParams::IP]),
                 CParams::PORT => isset($serverData[CParams::PORT]) ? $serverData[CParams::PORT] : 1,
                 CParams::QPORT => isset($serverData[CParams::QPORT]) ? $serverData[CParams::QPORT] : 1,
                 CParams::SPORT => isset($serverData[CParams::SPORT]) ? $serverData[CParams::SPORT] : 1,
@@ -90,63 +71,15 @@ class LGSQ
             SParams::CUSTOM_DATA => $cdata,
         ];
 
-        $this->request  = $request;
+        $this->request = $request;
 
-        $this->CheckAndConnect();
-    }
-
-    /**
-     * This checking if there are valid data.
-     */
-    public function CheckAndConnect()
-    {
-        /**
-         * ? IS VALID IP/HOSTNAME?
-         */
-        if (preg_match("/[^0-9a-zA-Z\.\-\[\]\:]/i", $this->server[SParams::BASIC][CParams::IP])) {
-            $this->server[SParams::BASIC]['status'] = 0;
-            $this->server[SParams::BASIC]['_error'] = "LGSQ: Invalid ip and/or hostname.";
-        }
-
-        /**
-         * ? IS VALID QUERY PORT?
-         */
-
-        if (!intval($this->server[SParams::BASIC][CParams::QPORT])) {
-            $this->server[SParams::BASIC]['status'] = 0;
-            $this->server[SParams::BASIC]['_error'] = "LGSQ: INVALID QUERY PORT";
-        }
-
-        /**
-         * ? EXIST PROTOCOL FOR GAME TYPE?
-         */
-        $protocol = ProtocolList::get();
-
-        if (!isset($protocol[$this->server[SParams::BASIC][CParams::TYPE]])) {
-            $this->server[SParams::BASIC]['status'] = 0;
-            $this->server[SParams::BASIC]['_error'] = [
-                'LGSQ:',
-                $this->server[SParams::BASIC][CParams::TYPE] ?
-                "INVALID TYPE '{$this->server[SParams::BASIC][CParams::TYPE]}'" : 'MISSING TYPE',
-                'For IP/HOSTNAME: '.$this->server[SParams::BASIC][CParams::IP].', Port: '.$this->server[SParams::BASIC][CParams::QPORT]
-            ];
-        }
-
-        $classCheck = "\\ZekyWolf\\LGSQ\\Protocols\\Query{$protocol[$this->server[SParams::BASIC][CParams::TYPE]]}";
-        if (!class_exists($classCheck)) {
-            $this->server[SParams::BASIC]['status'] = 0;
-            $this->server[SParams::BASIC]['_error'] = "Invalid query class name, {$classCheck}";
-        }
-
-        if(!$this->server[SParams::BASIC]['_error']) {
-            $this->Retrive();
-        }
+        $this->fetch();
     }
 
     /**
      * This is connecting to server and retriving data
      */
-    private function Retrive()
+    private function fetch()
     {
         $protocol = ProtocolList::get();
 
@@ -222,8 +155,6 @@ class LGSQ
      */
     private function queryDirect(&$server, array $request, $function, $scheme)
     {
-        $timeout = 5.0;
-
         if ($scheme == 'http') {
             if (
                 ! function_exists('curl_init') ||
@@ -236,8 +167,8 @@ class LGSQ
             $lgsl_fp = curl_init('');
             curl_setopt($lgsl_fp, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($lgsl_fp, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($lgsl_fp, CURLOPT_CONNECTTIMEOUT, $timeout);
-            curl_setopt($lgsl_fp, CURLOPT_TIMEOUT, 3);
+            curl_setopt($lgsl_fp, CURLOPT_CONNECTTIMEOUT, self::$options['curl_connect_timeout']);
+            curl_setopt($lgsl_fp, CURLOPT_TIMEOUT, self::$options['curl_timeout']);
             curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ['Accept: application/json']);
         } else {
             $lgsl_fp = @fsockopen(
@@ -254,7 +185,7 @@ class LGSQ
                 return false;
             }
 
-            stream_set_timeout($lgsl_fp, $timeout, $timeout ? 0 : 500000);
+            stream_set_timeout($lgsl_fp, self::$options['curl_connect_timeout'], self::$options['curl_connect_timeout'] ? 0 : 500000);
             stream_set_blocking($lgsl_fp, true);
         }
 
@@ -357,23 +288,13 @@ class LGSQ
         return $this->server[SParams::CONVARS];
     }
 
+    /**
+     * Retrive custom data
+     *
+     * @return array
+     */
     public function getCustomData(): array
     {
         return $this->server[SParams::CUSTOM_DATA];
-    }
-
-    private function clearHostName(string $ip): string
-    {
-        if(
-            $this->server[SParams::BASIC][CParams::TYPE] == Protocols::DISCORD &&
-            (str_contains($ip, 'discord.gg') || str_contains($ip, 'https://discord.gg'))
-        ) {
-            return str_replace([
-                'https://discord.gg/',
-                'discord.gg/',
-            ], "", $ip);
-        }
-
-        return str_replace(' ', '', $ip);
     }
 }

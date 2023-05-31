@@ -5,9 +5,9 @@ require_once __DIR__.'/vendor/autoload.php';
 
 use ZekyWolf\LGSQ\{
     LGSQ,
-    Helpers\ERequestParams,
-    Helpers\EServerParams,
-    Helpers\EConnectionParams,
+    Params\ERequestParams,
+    Params\EServerParams,
+    Params\EConnectionParams,
     Helpers\Protocols
 };
 
