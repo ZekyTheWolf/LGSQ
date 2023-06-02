@@ -2,6 +2,9 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.4.1 - 1.6.2023
+* Change sockets to stream_* that provides more api, reliability and improved performance.
+* New option params
 ## 1.4.0 - 30.5.2023
 * Seperated params from Helpers folder and moved to own
 * Created setOption/getOption function to be able set custom curl timeout.

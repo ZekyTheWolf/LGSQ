@@ -6,16 +6,21 @@ use ZekyWolf\LGSQ\{
     Params\ERequestParams as RParams,
     Params\EServerParams as SParams,
     Params\EConnectionParams as CParams,
+    Params\EOptionsParams as OParams,
+
     Helpers\ProtocolsTypeScheme,
     Helpers\ProtocolList,
+
     Traits\ValidateParamsTrait,
     Traits\OptionsTrait,
+    Traits\MiscFunctions,
 };
 
 class LGSQ
 {
     use ValidateParamsTrait;
     use OptionsTrait;
+    use MiscFunctions;
 
     /**
      * Recommend using Games scheme.
@@ -89,8 +94,6 @@ class LGSQ
             $lgsl_need = '';
             $lgsl_fp = '';
             $response = call_user_func_array([$class, 'get'], [&$this->server, &$lgsl_need, &$lgsl_fp]);
-
-            return $this->server;
         }
 
         $response = $this->queryDirect(
@@ -103,48 +106,7 @@ class LGSQ
         if (! $response) { // SERVER OFFLINE
             $this->server[SParams::BASIC]['status'] = 0;
         } else {
-            if (empty($this->server[SParams::SERVER]['game'])) {
-                $this->server[SParams::SERVER]['game'] = $this->server[SParams::BASIC][CParams::TYPE];
-            }
-            if (empty($this->server[SParams::SERVER]['map'])) {
-                $this->server[SParams::SERVER]['map'] = '-';
-            }
-
-            if (($pos = strrpos($this->server[SParams::SERVER]['map'], '/')) !== false) {
-                $this->server[SParams::SERVER]['map'] = substr($this->server[SParams::SERVER]['map'], $pos + 1);
-            }
-            if (($pos = strrpos($this->server[SParams::SERVER]['map'], '\\')) !== false) {
-                $this->server[SParams::SERVER]['map'] = substr($this->server[SParams::SERVER]['map'], $pos + 1);
-            }
-
-            $this->server[SParams::SERVER]['players'] = intval($this->server[SParams::SERVER]['players']);
-            $this->server[SParams::SERVER]['playersmax'] = intval($this->server[SParams::SERVER]['playersmax']);
-
-            if (isset($this->server[SParams::SERVER]['password'][0])) {
-                $this->server[SParams::SERVER]['password'] = (strtolower($this->server[SParams::SERVER]['password'][0]) == 't') ? 1 : 0;
-            } else {
-                $this->server[SParams::SERVER]['password'] = intval($this->server[SParams::SERVER]['password']);
-            }
-
-            if (
-                in_array(RParams::SERVER, $this->request)
-                && empty($this->server[SParams::PLAYERS])
-                && $this->server[SParams::SERVER]['players'] != 0
-            ) {
-                unset($this->server[SParams::PLAYERS]);
-            }
-
-            if (in_array(RParams::PLAYERS, $this->request) && empty($this->server[SParams::TEAMS])) {
-                unset($this->server[SParams::TEAMS]);
-            }
-
-            if (in_array(RParams::CONVARS, $this->request) && empty($this->server[SParams::CONVARS])) {
-                unset($this->server[SParams::CONVARS]);
-            }
-
-            if (in_array(RParams::SERVER, $this->request) && empty($this->server[SParams::SERVER])) {
-                unset($this->server[SParams::SERVER]);
-            }
+            $this->validateResponse();
         }
     }
 
@@ -153,7 +115,7 @@ class LGSQ
      *
      * Private function, because cant be used outside this file.
      */
-    private function queryDirect(&$server, array $request, $function, $scheme)
+    private function queryDirect(array &$server, array $request, mixed $function, string $scheme): bool
     {
         if ($scheme == 'http') {
             if (
@@ -165,36 +127,51 @@ class LGSQ
             }
 
             $lgsl_fp = curl_init('');
-            curl_setopt($lgsl_fp, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($lgsl_fp, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($lgsl_fp, CURLOPT_CONNECTTIMEOUT, self::$options['curl_connect_timeout']);
-            curl_setopt($lgsl_fp, CURLOPT_TIMEOUT, self::$options['curl_timeout']);
-            curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+
+            curl_setopt_array($lgsl_fp, [
+                CURLOPT_RETURNTRANSFER  => 1,
+                CURLOPT_SSL_VERIFYPEER  => 0,
+                CURLOPT_CONNECTTIMEOUT  => self::$options[OParams::CURL_CONNECT_TIMEOUT],
+                CURLOPT_TIMEOUT         => self::$options[OParams::CURL_TIMEOUT],
+                CURLOPT_HTTPHEADER      => [ 'Accept: application/json' ]
+            ]);
         } else {
-            $lgsl_fp = @fsockopen(
-                "{$scheme}://{$server[SParams::BASIC][CParams::IP]}",
-                $server[SParams::BASIC][CParams::QPORT],
+            $socketUrl = "{$scheme}://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}";
+
+            $context = stream_context_create([
+                'socket' => [
+                    'tcp_nodelay' => true,
+                    'SO_RCVTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
+                    'SO_SNDTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
+                ],
+            ]);
+
+            $errno = null;
+            $errstr = null;
+
+            $lgsl_fp = stream_socket_client(
+                $socketUrl,
                 $errno,
                 $errstr,
-                1
+                self::$options[OParams::STREAM_TIMEOUT],
+                STREAM_CLIENT_CONNECT,
+                $context
             );
-
-            if (! $lgsl_fp) {
+            if (!$lgsl_fp) {
                 $server[SParams::CONVARS][CParams::ERROR] = $errstr;
-
                 return false;
             }
 
-            stream_set_timeout($lgsl_fp, self::$options['curl_connect_timeout'], self::$options['curl_connect_timeout'] ? 0 : 500000);
-            stream_set_blocking($lgsl_fp, true);
+            stream_set_blocking($lgsl_fp, self::$options[OParams::STREAM_BLOCKING]);
+            stream_set_timeout($lgsl_fp, self::$options[OParams::STREAM_TIMEOUT]);
         }
 
         $lgsl_need = [];
-        $lgsl_need[RParams::SERVER] = in_array(RParams::SERVER, $request) !== false ? true : false;
-        $lgsl_need[RParams::CONVARS] = in_array(RParams::CONVARS, $request) !== false ? true : false;
-        $lgsl_need[RParams::PLAYERS] = in_array(RParams::PLAYERS, $request) !== false ? true : false;
+        $lgsl_need[RParams::SERVER] = in_array(RParams::SERVER, $request);
+        $lgsl_need[RParams::CONVARS] = in_array(RParams::CONVARS, $request);
+        $lgsl_need[RParams::PLAYERS] = in_array(RParams::PLAYERS, $request);
 
-        if ($lgsl_need[RParams::CONVARS] && ! $lgsl_need[RParams::SERVER]) {
+        if ($lgsl_need[RParams::CONVARS] && !$lgsl_need[RParams::SERVER]) {
             $lgsl_need[RParams::SERVER] = true;
         }
 
@@ -222,7 +199,7 @@ class LGSQ
         if ($scheme == 'http') {
             curl_close($lgsl_fp);
         } else {
-            @fclose($lgsl_fp);
+            fclose($lgsl_fp);
         }
 
         return $response;

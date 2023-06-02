@@ -5,6 +5,8 @@ namespace ZekyWolf\LGSQ\Traits;
 use ZekyWolf\LGSQ\{
     Helpers\ProtocolList,
     Params\EConnectionParams as CParams,
+    Params\ERequestParams as RParams,
+    Params\EServerParams as SParams,
 };
 
 trait ValidateParamsTrait
@@ -51,15 +53,49 @@ trait ValidateParamsTrait
         }
     }
 
-    public function clearHostName(string $ip): string
+    public function validateResponse()
     {
-        if((str_contains($ip, 'discord.gg') || str_contains($ip, 'https://discord.gg'))) {
-            return str_replace([
-                'https://discord.gg/',
-                'discord.gg/',
-            ], "", $ip);
+        if (empty($this->server[SParams::SERVER]['game'])) {
+            $this->server[SParams::SERVER]['game'] = $this->server[SParams::BASIC][CParams::TYPE];
+        }
+        if (empty($this->server[SParams::SERVER]['map'])) {
+            $this->server[SParams::SERVER]['map'] = '-';
         }
 
-        return str_replace(' ', '', $ip);
+        if (($pos = strrpos($this->server[SParams::SERVER]['map'], '/')) !== false) {
+            $this->server[SParams::SERVER]['map'] = substr($this->server[SParams::SERVER]['map'], $pos + 1);
+        }
+        if (($pos = strrpos($this->server[SParams::SERVER]['map'], '\\')) !== false) {
+            $this->server[SParams::SERVER]['map'] = substr($this->server[SParams::SERVER]['map'], $pos + 1);
+        }
+
+        $this->server[SParams::SERVER]['players'] = intval($this->server[SParams::SERVER]['players']);
+        $this->server[SParams::SERVER]['playersmax'] = intval($this->server[SParams::SERVER]['playersmax']);
+
+        if (isset($this->server[SParams::SERVER]['password'][0])) {
+            $this->server[SParams::SERVER]['password'] = (strtolower($this->server[SParams::SERVER]['password'][0]) == 't') ? 1 : 0;
+        } else {
+            $this->server[SParams::SERVER]['password'] = intval($this->server[SParams::SERVER]['password']);
+        }
+
+        if (
+            in_array(RParams::SERVER, $this->request)
+            && empty($this->server[SParams::PLAYERS])
+            && $this->server[SParams::SERVER]['players'] != 0
+        ) {
+            unset($this->server[SParams::PLAYERS]);
+        }
+
+        if (in_array(RParams::PLAYERS, $this->request) && empty($this->server[SParams::TEAMS])) {
+            unset($this->server[SParams::TEAMS]);
+        }
+
+        if (in_array(RParams::CONVARS, $this->request) && empty($this->server[SParams::CONVARS])) {
+            unset($this->server[SParams::CONVARS]);
+        }
+
+        if (in_array(RParams::SERVER, $this->request) && empty($this->server[SParams::SERVER])) {
+            unset($this->server[SParams::SERVER]);
+        }
     }
 }

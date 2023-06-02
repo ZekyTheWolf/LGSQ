@@ -9,6 +9,8 @@ trait OptionsTrait
     private static array $options = [
         OParams::CURL_CONNECT_TIMEOUT => 1,
         OParams::CURL_TIMEOUT => 3,
+        OParams::STREAM_BLOCKING => true,
+        OParams::STREAM_TIMEOUT => 3,
     ];
 
     /**
