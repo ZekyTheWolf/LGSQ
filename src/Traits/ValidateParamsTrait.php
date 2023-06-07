@@ -7,10 +7,13 @@ use ZekyWolf\LGSQ\{
     Params\EConnectionParams as CParams,
     Params\ERequestParams as RParams,
     Params\EServerParams as SParams,
+    Traits\MiscFunctions,
 };
 
 trait ValidateParamsTrait
 {
+    use MiscFunctions;
+
     public function validate(array $serverData)
     {
         if (!array_key_exists(CParams::TYPE, $serverData) || empty($serverData[CParams::TYPE])) {
@@ -24,7 +27,7 @@ trait ValidateParamsTrait
         /**
          * ? IS VALID IP/HOSTNAME?
          */
-        if (preg_match("/[^0-9a-zA-Z\.\-\[\]\:]/i", $serverData[CParams::IP])) {
+        if (preg_match("/[^0-9a-zA-Z\.\-\[\]\:]/i", $this->clearHostName($serverData[CParams::IP]))) {
             throw new \Exception("Invalid ip/hostname, '" . CParams::IP . "'!");
         }
 

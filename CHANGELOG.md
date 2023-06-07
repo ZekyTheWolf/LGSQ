@@ -2,6 +2,8 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.4.2 - 7.6.2023
+* Fix validate spacing, removing spaces from ip when validate.
 ## 1.4.1 - 1.6.2023
 * Change sockets to stream_* that provides more api, reliability and improved performance.
 * New option params
