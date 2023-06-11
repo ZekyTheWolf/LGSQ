@@ -2,11 +2,16 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.4.3 - 11.6.2023
+* Update composer.json, added missing authors, update PHP version (Now allowing PHP 8.0, 8.1)
+
 ## 1.4.2 - 7.6.2023
 * Fix validate spacing, removing spaces from ip when validate.
+
 ## 1.4.1 - 1.6.2023
 * Change sockets to stream_* that provides more api, reliability and improved performance.
 * New option params
+
 ## 1.4.0 - 30.5.2023
 * Seperated params from Helpers folder and moved to own
 * Created setOption/getOption function to be able set custom curl timeout.

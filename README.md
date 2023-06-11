@@ -5,7 +5,13 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/zekythewolf/lgsq.svg?style=for-the-badge&color=%23fff)](https://packagist.org/packages/zekythewolf/lgsq)
 
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Live game server query, standlone library that provides multiple game queries for you. <br />
+Based on [LGSL](https://github.com/tltneon/lgsl), thanks to tltneon.
+<br />
+<br />
+This package is tested only on PHP 8.2, why? <br />
+Because PHP 7.4 or lower are on end of life and PHP 8.0 is only security fixes.<br />
+My recommendation is to use latest version, that is available at [PHP](https://php.net)
 
 ## Installation
 

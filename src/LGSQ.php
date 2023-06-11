@@ -33,7 +33,7 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.4.2';
+    public const LGSQ_VERSION = '1.4.3';
 
     /**
      * Validate server data, connect and set data.
