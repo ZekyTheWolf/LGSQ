@@ -2,6 +2,12 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.4.4 - 15.6.2023
+* Added join link
+* Updated Protocols.php
+* Updated ProtocolLst.php
+* Updated SoftwareLink.php
+* Updated TypeList.php
 ## 1.4.3 - 11.6.2023
 * Update composer.json, added missing authors, update PHP version (Now allowing PHP 8.0, 8.1)
 

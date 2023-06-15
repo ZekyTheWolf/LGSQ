@@ -33,7 +33,7 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.4.3';
+    public const LGSQ_VERSION = '1.4.4';
 
     /**
      * Validate server data, connect and set data.
@@ -66,6 +66,7 @@ class LGSQ
                 'game' => '',
                 'name' => '',
                 'map' => '',
+                'join_link' => '',
                 'players' => 0,
                 'playersmax' => 0,
                 'password' => '',
