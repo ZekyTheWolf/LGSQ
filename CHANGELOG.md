@@ -2,6 +2,9 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.4.5 - 15.6.2023
+* Fix typo
+
 ## 1.4.4 - 15.6.2023
 * Added join link
 * Updated Protocols.php
