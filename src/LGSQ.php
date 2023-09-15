@@ -33,7 +33,7 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.4.4';
+    public const LGSQ_VERSION = '1.4.3';
 
     /**
      * Validate server data, connect and set data.
@@ -66,7 +66,6 @@ class LGSQ
                 'game' => '',
                 'name' => '',
                 'map' => '',
-                'join_link' => '',
                 'players' => 0,
                 'playersmax' => 0,
                 'password' => '',
@@ -150,7 +149,7 @@ class LGSQ
             $errno = null;
             $errstr = null;
 
-            $lgsl_fp = @stream_socket_client(
+            $lgsl_fp = stream_socket_client(
                 $socketUrl,
                 $errno,
                 $errstr,
