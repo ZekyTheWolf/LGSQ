@@ -136,29 +136,17 @@ class LGSQ
                 CURLOPT_HTTPHEADER      => [ 'Accept: application/json' ]
             ]);
         } else {
-            $socketUrl = "{$scheme}://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}";
-
-            $context = stream_context_create([
-                'socket' => [
-                    'tcp_nodelay' => true,
-                    'SO_RCVTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
-                    'SO_SNDTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
-                ],
-            ]);
-
-            $errno = null;
-            $errstr = null;
-
-            $lgsl_fp = stream_socket_client(
-                $socketUrl,
+            $lgsl_fp = @fsockopen(
+                "{$scheme}://{$server[SParams::BASIC][CParams::IP]}",
+                $server[SParams::BASIC][CParams::QPORT],
                 $errno,
                 $errstr,
-                self::$options[OParams::STREAM_TIMEOUT],
-                STREAM_CLIENT_CONNECT,
-                $context
+                1
             );
+            
             if (!$lgsl_fp) {
-                $server[SParams::CONVARS][CParams::ERROR] = $errstr;
+                $server[SParams::BASIC][CParams::ERROR] = $errstr;
+
                 return false;
             }
 
