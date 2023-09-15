@@ -55,7 +55,7 @@ class LGSQ
         $this->server = [
             SParams::BASIC => [
                 CParams::TYPE => $serverData[CParams::TYPE],
-                CParams::IP => $this->clearHostName($serverData[CParams::IP]),
+                CParams::IP => $this->clearHostName($serverData[CParams::TYPE], $serverData[CParams::IP]),
                 CParams::PORT => isset($serverData[CParams::PORT]) ? $serverData[CParams::PORT] : 1,
                 CParams::QPORT => isset($serverData[CParams::QPORT]) ? $serverData[CParams::QPORT] : 1,
                 CParams::SPORT => isset($serverData[CParams::SPORT]) ? $serverData[CParams::SPORT] : 1,
@@ -137,34 +137,22 @@ class LGSQ
                 CURLOPT_HTTPHEADER      => [ 'Accept: application/json' ]
             ]);
         } else {
-            $socketUrl = "{$scheme}://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}";
-
-            $context = stream_context_create([
-                'socket' => [
-                    'tcp_nodelay' => true,
-                    'SO_RCVTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
-                    'SO_SNDTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
-                ],
-            ]);
-
-            $errno = null;
-            $errstr = null;
-
-            $lgsl_fp = stream_socket_client(
-                $socketUrl,
+            $lgsl_fp = @fsockopen(
+                "{$scheme}://{$server[SParams::BASIC][CParams::IP]}",
+                $server[SParams::BASIC][CParams::QPORT],
                 $errno,
                 $errstr,
-                self::$options[OParams::STREAM_TIMEOUT],
-                STREAM_CLIENT_CONNECT,
-                $context
+                1
             );
+
             if (!$lgsl_fp) {
                 $server[SParams::CONVARS][CParams::ERROR] = $errstr;
+
                 return false;
             }
 
-            stream_set_blocking($lgsl_fp, self::$options[OParams::STREAM_BLOCKING]);
-            stream_set_timeout($lgsl_fp, self::$options[OParams::STREAM_TIMEOUT]);
+            stream_set_timeout($lgsl_fp, self::$options[OParams::STREAM_TIMEOUT], self::$options[OParams::STREAM_TIMEOUT] ? 0 : 500000);
+            stream_set_blocking($lgsl_fp, true);
         }
 
         $lgsl_need = [];

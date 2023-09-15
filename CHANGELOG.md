@@ -2,6 +2,9 @@
 
 All notable changes to `lgsq` will be documented in this file
 
+## 1.4.x - 15.6.2023
+* move back to fsocketopen function
+
 ## 1.4.5 - 15.6.2023
 * Fix typo
 
