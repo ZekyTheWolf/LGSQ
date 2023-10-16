@@ -4,7 +4,6 @@ namespace ZekyWolf\LGSQ\Traits;
 
 use ZekyWolf\LGSQ\{
     Helpers\ProtocolList,
-    Helpers\SoftwareLink,
     Params\EConnectionParams as CParams,
     Params\ERequestParams as RParams,
     Params\EServerParams as SParams,
@@ -82,8 +81,6 @@ trait ValidateParamsTrait
             $this->server[SParams::SERVER]['password'] = intval($this->server[SParams::SERVER]['password']);
         }
 
-        $this->server[SParams::SERVER]['join_link'] = $this->createJoinLink();
-
         if (
             in_array(RParams::SERVER, $this->request)
             && empty($this->server[SParams::PLAYERS])
@@ -103,16 +100,5 @@ trait ValidateParamsTrait
         if (in_array(RParams::SERVER, $this->request) && empty($this->server[SParams::SERVER])) {
             unset($this->server[SParams::SERVER]);
         }
-    }
-
-    private function createJoinLink()
-    {
-        return SoftwareLink::get(
-            $this->server[SParams::BASIC][CParams::TYPE],
-            $this->server[SParams::BASIC][CParams::IP],
-            $this->server[SParams::BASIC][CParams::PORT],
-            $this->server[SParams::BASIC][CParams::QPORT],
-            $this->server[SParams::BASIC][CParams::SPORT],
-        );
     }
 }
