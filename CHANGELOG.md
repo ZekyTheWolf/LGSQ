@@ -2,17 +2,8 @@
 
 All notable changes to `lgsq` will be documented in this file
 
-## 1.4.5 - 15.6.2023
-* Fix typo
-
-## 1.4.4 - 15.6.2023
-* Added join link
-* Updated Protocols.php
-* Updated ProtocolLst.php
-* Updated SoftwareLink.php
-* Updated TypeList.php
-## 1.4.3 - 11.6.2023
-* Update composer.json, added missing authors, update PHP version (Now allowing PHP 8.0, 8.1)
+## 1.6.0 - 18.10.2023
+- Revert back to stream_socket_ (couldnt retrive ts3 status with @fsockets)
 
 ## 1.4.2 - 7.6.2023
 * Fix validate spacing, removing spaces from ip when validate.

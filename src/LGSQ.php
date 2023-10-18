@@ -33,7 +33,7 @@ class LGSQ
      * MINOR
      * PATCH
      */
-    public const LGSQ_VERSION = '1.4.3';
+    public const LGSQ_VERSION = '1.6.0';
 
     /**
      * Validate server data, connect and set data.
@@ -136,17 +136,34 @@ class LGSQ
                 CURLOPT_HTTPHEADER      => [ 'Accept: application/json' ]
             ]);
         } else {
-            $lgsl_fp = @fsockopen(
-                "{$scheme}://{$server[SParams::BASIC][CParams::IP]}",
-                $server[SParams::BASIC][CParams::QPORT],
+            $socketUrl = "{$scheme}://{$server[SParams::BASIC][CParams::IP]}:{$server[SParams::BASIC][CParams::QPORT]}";
+
+            $errno = null;
+            $errstr = null;
+
+            $context = stream_context_create([
+                'socket' => [
+                    'tcp_nodelay' => true,
+                    'SO_RCVTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
+                    'SO_SNDTIMEO' => ['sec' => self::$options[OParams::STREAM_TIMEOUT], 'usec' => 0],
+                    'so_error' => $errstr,
+                ],
+            ]);
+
+            $lgsl_fp = @stream_socket_client(
+                $socketUrl,
                 $errno,
                 $errstr,
-                1
+                self::$options[OParams::STREAM_TIMEOUT],
+                STREAM_CLIENT_CONNECT,
+                $context
             );
             
             if (!$lgsl_fp) {
-                $server[SParams::BASIC][CParams::ERROR] = $errstr;
-
+                $server[SParams::CONVARS][CParams::ERROR] = [
+                    'code' => $errno,
+                    'message' => $errstr,
+                ];
                 return false;
             }
 

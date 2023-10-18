@@ -10,23 +10,13 @@
     "type": "library",
     "authors": [
         {
-			"name": "Richard Perry",
-			"homepage": "http://www.greycube.com",
-			"role": "Author"
-		},
-		{
-			"name": "Neon",
-			"homepage": "https://github.com/tltneon",
-			"role": "Developer"
-		},
-        {
             "name": "Zeky Wolf",
             "email": "zeky@zeky.xyz",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.4|^8.0|^8.1|^8.2"
+        "php": "^8.2"
     },
     "require-dev": {
         "laravel/pint": "^1.10",

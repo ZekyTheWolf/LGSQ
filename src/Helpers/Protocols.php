@@ -7,9 +7,6 @@ abstract class Protocols
     /** Americas Army */
     public const AMERICASARMY               = 'aarmy';
 
-    /** Americas Army _ */
-    public const AMERICASARMY_              = 'aarmy_';
-
     /** Americas Army 3 */
     public const AMERICASARMY3              = 'aarmy3';
 
@@ -205,17 +202,11 @@ abstract class Protocols
     /** Medal of Honor: Allied Assault */
     public const MOHAA                      = 'mohaa';
 
-    /** Medal of Honor: Allied Assault _ */
-    public const MOHAA_                     = 'mohaa_';
-
     /** Medal of Honor: Allied Assault Breakthrough */
     public const MEDALOFHONOR_ALLIEDASSAULTBREAKTHROUGH = 'mohaab';
 
     /** Medal of Honor: Allied Assault Breakthrough */
     public const MOHAAB                     = 'mohaab';
-
-    /** Medal of Honor: Allied Assault Breakthrough */
-    public const MOHAAB_                    = 'mohaab_';
 
     /** Medal of Honor: Allied Assault Spearhead */
     public const MEDALOFHONOR_ALLIEDASSAULTSPEARHEAD = 'mohaas';
@@ -223,17 +214,11 @@ abstract class Protocols
     /** Medal of Honor: Allied Assault Spearhead */
     public const MOHAAS                      = 'mohaas';
 
-    /** Medal of Honor: Allied Assault Spearhead */
-    public const MOHAAS_                     = 'mohaas_';
-
     /** Medal of Honor: Pacific Assault */
     public const MEDALOFHONOR_PACIFICASSAULT  = 'mohpa';
 
     /** Medal of Honor: Pacific Assault */
-    public const MOHPA                      = 'mohpa';
-
-    /** Medal of Honor: Pacific Assault */
-    public const MOHPA_                     = 'mohpa_';
+    public const MOPHA                      = 'mohpa';
 
     /** Multi Theft Auto*/
     public const MULTITHEFTAUTO             = 'mta';
@@ -261,9 +246,6 @@ abstract class Protocols
 
     /** PainKiller */
     public const PAINKILLER                 = 'painkiller';
-
-    /** PainKiller_ */
-    public const PAINKILLER_                = 'painkiller_';
 
     /** Plain Sight */
     public const PLAINSIGHT                 = 'plainsight';
@@ -334,12 +316,6 @@ abstract class Protocols
     /** Source Protocol ( Half-Life 2, etc. ) */
     public const SOURCE                     = 'source';
 
-    /** Source Protocol ( Half-Life 2, etc. ) */
-    public const CS16                       = 'cs16';
-
-    /** Source Protocol ( Half-Life 2, etc. ) */
-    public const CSGO                       = 'csgo';
-
     /** */
     //  public const SOURCE2                    = 'source2';
 
@@ -374,13 +350,13 @@ abstract class Protocols
     public const TERRARIA                   = 'terraria';
 
     /** Tribes ( Starsiege ) */
-    public const TRIBES                    = 'tribes';
+    public const TRIBERS                    = 'tribes';
 
     /** Tribes 2 */
-    public const TRIBES2                   = 'tribes2';
+    public const TRIBERS2                   = 'tribes2';
 
     /** Tribes Vengeance */
-    public const TRIBESV                   = 'tribesv';
+    public const TRIBERSV                   = 'tribesv';
 
     /** Teamspeak */
     public const TS                         = 'ts';
@@ -392,7 +368,7 @@ abstract class Protocols
     public const TS3                        = 'ts3';
 
     /** Teamspeak 3*/
-    public const TEAMSPEAK3                 = 'teamspeak3';
+    public const TEAMSPEAK3                 = 'ts3';
 
     /** Teaspeak */
     public const TEASPEAK                   = 'teaspeak';
@@ -406,14 +382,8 @@ abstract class Protocols
     /** Unreal Tournament 2003*/
     public const UNREALTOURNAMENT2003       = 'ut2003';
 
-    /** Unreal Tournament 2003_*/
-    public const UNREALTOURNAMENT2003_      = 'ut2003_';
-
     /** Unreal Tournament 2004*/
     public const UNREALTOURNAMENT2004       = 'ut2004';
-
-    /** Unreal Tournament 2004_*/
-    public const UNREALTOURNAMENT2004_      = 'utut2004_2004';
 
     /** Unreal Tournament 3*/
     public const UNREALTOURNAMENT3          = 'ut3';
